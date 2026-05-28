@@ -1,0 +1,34 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.iml
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# Dependencies (Java + Node)
+node_modules/
+__pycache__/
+*.pyc
+target/
+dist/
+build/
+
+# Env
+.env
+.env.local
+
+# OpenSpec init 前的脚手架备份（确认无用后可手工删除）
+openspec.scaffold.bak/
+
+# submodule 迁移中产生的本地残留（验证远端后手工删除）
+backend.bak/
+frontend.bak/
+frontend.junk/
