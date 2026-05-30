@@ -25,7 +25,7 @@
 │   ├── specs/             # 已稳定的能力 spec
 │   └── changes/           # 进行中的变更提案
 ├── backend/                # Spring Boot 后端（0002 变更后）
-└── frontend/               # Vite + React 前端（0002 变更后）
+└── frontend/               # Next.js + React 前端（migrate-frontend-to-nextjs 变更后）
 ```
 
 ## 怎么用
@@ -45,31 +45,39 @@
 
 ## 本地开发
 
-> 后端跟前端要起两个终端；前端通过 Vite proxy 把 `/api` 路由给后端。
+> 后端跟前端要起两个终端；前端 Next.js Server Component 在服务端直接 fetch `BACKEND_URL`（无 CORS）。**先起后端再起前端**。
 
 ```bash
 # 终端 A：后端（启动后监听 localhost:8080）
 mvn -f backend/pom.xml spring-boot:run
 
-# 终端 B：前端（启动后监听 localhost:5173）
+# 终端 B：前端（启动后监听 localhost:3000，被占时自动 fallback）
 cd frontend && npm install && npm run dev
 ```
 
-打开浏览器访问 <http://localhost:5173/>，看到页面显示 `Backend says: hello` 即代表前后端联调通了。
-
-### 跳测试
+首次启动前手动创建 `frontend/.env.local`（已在 `.gitignore`）：
 
 ```bash
-mvn -f backend/pom.xml test
+# frontend/.env.local
+BACKEND_URL=http://localhost:8080
 ```
 
-### 端口 / 代理约定
+打开浏览器访问 <http://localhost:3000/>，看到页面显示 `hello` 即代表前后端 SSR 联调通了。
+
+### 跑测试
+
+```bash
+mvn -f backend/pom.xml test       # 后端
+cd frontend && npm test           # 前端（Vitest）
+```
+
+### 端口约定
 
 | 路径 | 运行位置 | 说明 |
 |---|---|---|
 | `http://localhost:8080/api/hello` | Spring Boot | 返回纯文本 `hello` |
-| `http://localhost:5173/` | Vite dev server | React 页面 |
-| `http://localhost:5173/api/*` | Vite proxy | 转发到 `http://localhost:8080/api/*` |
+| `http://localhost:3000/` | Next.js dev server | App Router 首页（SSR 预取 `/api/hello`） |
+| `BACKEND_URL` | `frontend/.env.local`（不入仓） | Server Component 服务端 fetch 地址 |
 
 ## 升级 OpenSpec
 

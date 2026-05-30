@@ -4,8 +4,8 @@
 
 | 决策 | 选择 | 理由 |
 |---|---|---|
-| 前端框架 | **Next.js 15（App Router）** | 解决 SSR/SEO 硬伤；文件路由 + 嵌套布局是事实标准；Vercel 原生支持 |
-| 路由模式 | App Router（`app/`），不用 Pages Router | Next.js 15 官方主线；后续 RSC / streaming 演进路径在 App Router 上 |
+| 前端框架 | **Next.js 16（App Router）** | 解决 SSR/SEO 硬伤；文件路由 + 嵌套布局是事实标准；Vercel 原生支持 |
+| 路由模式 | App Router（`app/`），不用 Pages Router | Next.js 16 官方主线；后续 RSC / streaming 演进路径在 App Router 上 |
 | 语言 | **TypeScript** | Next.js 官方默认；AI 生成质量更高；为未来 OpenAPI 类型对齐打基础 |
 | 包管理 | npm | 与现仓库 `package-lock.json` 历史一致，避免无谓发明 |
 | 创建方式 | `npx create-next-app@latest frontend --ts --app --no-tailwind --no-eslint --import-alias "@/*"` | 官方脚手架；显式关闭本次不需要的 Tailwind/ESLint 默认引入，由后续 change 自行决定 |
@@ -14,10 +14,12 @@
 | BFF 边界 | **薄 BFF**：仅 SSR 数据预取 + 多接口聚合 + 字段裁剪 | AGENTS.md 已锁；写操作 / 业务逻辑全部走 Spring Boot |
 | Hello 调用方式 | 在 Server Component 内直接 `fetch('http://localhost:8080/api/hello', { cache: 'no-store' })`，渲染到页面 | 演示 SSR 数据流；BFF 实践样板 |
 | 跨域处理 | **不再用 dev proxy**；前端在 server 端直连后端 8080 | App Router 的 RSC 在服务端发起请求，浏览器不直接打 `/api`，无 CORS 问题 |
-| 端口约定 | 前端 3000（Next.js 默认） / 后端 8080（保持） | 不发明 |
+| 端口约定 | 前端 3000（Next.js 默认，被占时 next dev 自动 fallback 到下一个可用端口） / 后端 8080（保持） | 不发明；BACKEND_URL 不依赖前端端口 |
 | 后端环境变量 | `BACKEND_URL=http://localhost:8080` 写入 `frontend/.env.local` | 部署时由 Vercel 环境变量注入；不硬编码 |
 | 旧工程处理 | **整目录覆盖**重建 `frontend/`，git 历史保留 | 一次性切换的语义；不留 `frontend.legacy/` |
 | 旧 Vite 测试覆盖 | 当前 Vite 工程**无测试**，无迁移成本 | 验证：仅 `eslint.config.js` + 几个 `.jsx` |
+
+frontend 在脚手架验证后实际为 **Next.js 16.2.x + React 19.2.x + TypeScript 5**；与原 spec 的 "Next.js 15" 偏差是脚手架主版本迭代造成的，本变更跟随官方最新。
 
 ## 系统结构（变更后）
 
@@ -26,10 +28,12 @@ my-first-project/
 ├── backend/                       Spring Boot（不动）
 │   └── ... 原样
 │
-├── frontend/                      Next.js 15（重建）
+├── frontend/                      Next.js 16（重建）
 │   ├── package.json
-│   ├── next.config.mjs
+│   ├── next.config.ts             TS 配置（Next 16 默认）
 │   ├── tsconfig.json
+│   ├── AGENTS.md                  Next 16 自带的 AI 提示（子仓作用域）
+│   ├── CLAUDE.md                  同上、指向 AGENTS.md
 │   ├── .env.local                 BACKEND_URL=http://localhost:8080
 │   ├── app/
 │   │   ├── layout.tsx             根布局

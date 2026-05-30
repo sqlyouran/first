@@ -8,7 +8,7 @@
 |---|---|---|---|
 | 工作区父仓 | https://github.com/sqlyouran/first | `.` | Harness（`.qoder/`）+ Spec（`openspec/`）+ submodule 指针 |
 | Backend submodule | https://github.com/sqlyouran/first_backend | `backend/` | Java 17 + Spring Boot 3.3.5，HTTP API（端口 8080） |
-| Frontend submodule | https://github.com/sqlyouran/first_frontend | `frontend/` | Vite 8 + React 19，UI（端口 5173） |
+| Frontend submodule | https://github.com/sqlyouran/first_frontend | `frontend/` | Next.js 16 (App Router) + React 19 + TypeScript，UI 与薄 BFF（端口 3000） |
 
 > 父仓只追踪两个子仓的 commit SHA，**不直接持有业务代码**。业务代码写在对应 submodule 内。
 
@@ -51,12 +51,13 @@ frontend 同理。
 - 测试：`mvn -f backend/pom.xml test`
 - 工具链：JDK 17 / Maven 3.6.1（pluginManagement pin maven-compiler-plugin@3.10.1 + maven-surefire-plugin@2.22.2）
 
-### `frontend/` — Vite + React UI
+### `frontend/` — Next.js + React UI / 薄 BFF
 
 - 仓库：https://github.com/sqlyouran/first_frontend
-- 启动：`cd frontend && npm install && npm run dev` → `http://localhost:5173`
+- 启动：`cd frontend && npm install && npm run dev` → `http://localhost:3000`（3000 被占时自动 fallback到下一个可用端口）
 - 构建：`npm run build`
-- 工具链：Node 20.20.2 / Vite 8 / React 19
+- 测试：`npm test`（Vitest + React Testing Library）
+- 工具链：Node ≥ 20.19 / Next.js 16 / React 19 / TypeScript 5
 
 ## 技术选型约束
 
@@ -86,7 +87,7 @@ frontend 同理。
 
 | 层 | 选型 | 决定性理由 |
 |---|---|---|
-| 前端 | **React + Vite**（现状） | 团队 React 基本盘；Vite 现状已就位，无切换收益 |
+| 前端 | **React 19 + Next.js 16（App Router）+ TypeScript** | SSR/SEO 能力 + 文件路由约定 + Vercel 原生部署；Next.js 仅作薄 BFF，不承担业务逻辑 |
 | 后端 | **Spring Boot 3.3.x** | 团队经验 + 生态完备 + 分层约定强 + 长期可维护 |
 | 接口契约 | **OpenAPI / springdoc-openapi** | 后端生成 schema，前端用 `openapi-typescript` 生成 TS 类型，弥补跨语言上下文 |
 | 数据库 | Postgres | OLTP + JSON 兼容 |
@@ -96,6 +97,14 @@ frontend 同理。
 - ❌ 把后端切到 Next.js API Routes / Server Actions（仅适用于短周期 MVP，不适用本项目长期场景）
 - ❌ 把前端切到 Vue / Nuxt / Svelte 等非 React 系（团队学习成本归零原则）
 - ❌ 用 "AI 生成质量更高" 单一理由推翻已锁定栈（须同时满足长期工程性维度）
+
+#### Next.js BFF 边界（必读约束）
+
+前端是薄 BFF，不是业务后端。违反这些边界需重新 propose：
+
+- ✅ **允许**（薄 BFF 范围）：Server Component SSR 预取 / 多接口聚合 / 字段裁剪 / 缓存读（`fetch` 的 `cache` 与 `next.revalidate`）
+- ❌ **禁止**（业务后端范围）：在 Route Handlers (`app/api/**/route.ts`) 写入业务、在 Server Actions 实现鉴权写 / 事务 / 领域逻辑、写数据库 / 操作消息队列 / 状态机
+- 薄 BFF 可验收：`frontend/lib/backend.ts` 首行 `import 'server-only'`；codebase 内不出现 `app/api/**/route.ts`
 
 ### 何时需要重新评估
 

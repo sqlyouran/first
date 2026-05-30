@@ -10,7 +10,7 @@
 
 ## What Changes
 
-- **前端工程一次性重建**：废弃当前 Vite 工程，在 `frontend/` 用 Next.js 15（App Router）重建，迁移 `/api/hello` 联通用例。
+- **前端工程一次性重建**：废弃当前 Vite 工程，在 `frontend/` 用 Next.js 16（App Router）重建，迁移 `/api/hello` 联通用例。
 - **薄 BFF 边界严格约束**：Next.js 仅做 SSR 数据预取、多接口聚合、字段裁剪。**所有写操作、事务、权限校验、业务逻辑仍走 Spring Boot**，不允许业务下沉到 Route Handlers / Server Actions。
 - **接口契约**：本变更内手写 TS 接口类型；OpenAPI（springdoc-openapi + openapi-typescript）契约管线**留给单独 change 引入**，避免本次变更范围爆炸（YAGNI，当前只有一个 `/api/hello` 端点）。
 - **同步更新治理文档**：

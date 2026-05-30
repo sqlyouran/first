@@ -32,7 +32,7 @@ my-first-project
 
 ## 技术栈
 
-本项目使用前后端分离架构，后端负责 HTTP API，前端 SPA 代理调用。
+本项目使用前后端分离架构。后端 Spring Boot 负责业务 HTTP API；前端 Next.js 同时承担 UI 与薄 BFF（SSR 预取 / 接口聚合 / 字段裁剪 / 缓存读），**业务逻辑一律在后端**。
 
 | 维度 | 选型 | 说明 |
 |---|---|---|
@@ -40,10 +40,12 @@ my-first-project
 | 后端框架 | Spring Boot 3.3.5 | spring-boot-starter-web |
 | 后端构建 | Maven 单模块 (`backend/pom.xml`) | groupId `com.mooc`、artifactId `app`、打包 jar |
 | 后端测试 | JUnit 5 + Spring Boot Test (`@WebMvcTest`) | 切片测试为主，避免全量上下文 |
-| 前端框架 | React 19 | JS 模板，不用 TypeScript |
-| 前端构建 | Vite 8 (`frontend/`) | dev server 启于 5173 |
-| 跨域 | Vite dev server proxy | `'/api' → http://localhost:8080'` |
-| Node 运行时 | Node.js >=20.19 | vite 8 / eslint 10 要求 |
+| 前端框架 | React 19 + Next.js 16 (App Router) + TypeScript 5 | 薄 BFF 路由：`app/page.tsx` Server Component 预取，`app/HelloMessage.tsx` Client Component 呈现 |
+| 前端构建 | Next.js 16 内建 (`frontend/`) | dev server 起于 3000（8080 为后端，被占时自动 fallback 到下一个可用端口） |
+| 前端测试 | Vitest + @testing-library/react + jsdom | Server Component 不可直接 render，需抽为 Client Component 后覆盖 |
+| BFF 调用 | `frontend/lib/backend.ts`（`import 'server-only'`） | Server Component 中用 `fetchFromBackend('/api/...')` 调后端，无 CORS 问题 |
+| 环境变量 | `frontend/.env.local`（不入仓） | `BACKEND_URL=http://localhost:8080` |
+| Node 运行时 | Node.js ≥ 20.19 | Next.js 16 要求 |
 
 变更记录见 `openspec/changes/archive/`。
 
