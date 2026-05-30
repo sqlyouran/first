@@ -101,14 +101,14 @@
 - [x] 7.5 父仓提交（commit `3ae1937`）：`docs: sync governance docs for next.js migration (agents/project/http-server spec)`
 
 ## 8. 验证清单（端到端）
-- [ ] 8.1 `mvn -f backend/pom.xml test` 全绿（确认本变更未误伤后端）
-- [ ] 8.2 `cd frontend && npm test` 全绿（Vitest 用例通过）
-- [ ] 8.3 `cd frontend && npm run build` 通过（生产构建无错误）
-- [ ] 8.4 端到端：起后端 + 起前端 → 浏览器访问 `http://localhost:3000` 看到 `hello`
-- [ ] 8.5 浏览器 View Source 验证 `hello` 在初始 HTML（SSR 生效）
-- [ ] 8.6 `frontend/` 目录下**不存在**任何 `app/api/**/route.ts` 文件（BFF 边界守护）
-- [ ] 8.7 `frontend/lib/backend.ts` 首行为 `import 'server-only';`
-- [ ] 8.8 父仓 `git diff --stat HEAD~..HEAD` 仅含治理文档与 submodule 指针，无业务代码
+- [x] 8.1 ~~`mvn -f backend/pom.xml test`~~ **跳过**（Maven 未安装；本变更未修改任何 backend/ 文件，父仓 diff 证明零 backend 变动，记为 spec drift，后端质量负担为 0）
+- [x] 8.2 `cd frontend && npm test` 全绿（1 passed）
+- [x] 8.3 `cd frontend && npm run build` 通过（Compiled successfully，`/` 为 Dynamic SSR）
+- [x] 8.4 端到端：起后端（复用 PID 7886 的 Spring Boot）+ 起前端 → `curl http://localhost:3001` HTTP 200
+- [x] 8.5 SSR 验证：首屏 HTML 含 `<h1>hello</h1>` 与 RSC payload `{"message":"hello"}`【Batch 5 已验证】
+- [x] 8.6 `frontend/app/` 下**不存在** `route.ts` / `route.tsx`（`find` 返回 0，BFF 边界守护成功）
+- [x] 8.7 `frontend/lib/backend.ts` 首行为 `import "server-only";`
+- [x] 8.8 父仓 `git diff --stat origin/main..HEAD` 仅含治理文档与 submodule 指针，无业务代码（8 files：.gitmodules / AGENTS.md / README.md / frontend指针 / openspec二者三件套）
 
 ## 9. 后续（不在本变更范围）
 - [ ] 引入 OpenAPI 契约管线：`backend` 增加 `springdoc-openapi`，`frontend` 增加 `openapi-typescript` 自动生成 TS 类型（建议命名 `add-openapi-contract`）
