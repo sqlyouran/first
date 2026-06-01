@@ -49,6 +49,37 @@ my-first-project
 
 变更记录见 `openspec/changes/archive/`。
 
+## OpenSpec Conventions
+
+本项目对 OpenSpec 工作流的额外约定（与 OpenSpec 官方 schema 兼容，但补充粒度规则）：
+
+### Capability 粒度：每 change 一个 capability（精细粒度）
+
+- 每个 OpenSpec change 对应**一个独立 capability**，命名与 change 名一致（kebab-case）。
+- 例：change `frontend-styling-stack` → capability `frontend-styling`；change `homepage-shell` → capability `homepage-shell`。
+- 选这个粒度的理由：archive 时 `openspec/specs/<capability>/spec.md` 各归各位、零冲突，支持 6+ 个区块 change 并行 apply。
+- 不建议把多个 change 写到同一个 capability（会让 archive merge 时反复编辑同一文件，增加冲突面）。
+
+### `openspec/notes/` 的角色
+
+- `openspec/notes/<topic>/<name>.md` 存放**人类可读的工程 brief**——结构化但非 OpenSpec schema 格式（如 4 章节中文模板：边界 / 场景 / 数据结构 / Acceptance）。
+- OpenSpec CLI **不会**扫到 `notes/`，仅 `specs/` 与 `changes/` 进入工作流。
+- brief 用途：propose 阶段作为 LLM 上下文喂入；review 阶段作为团队对齐文档；不参与 archive 合入。
+- 与 `openspec/specs/<capability>/spec.md`（capability 主索引，由 archive 自然填充）严格分工。
+
+### Change 与 brief 的对照
+
+| Change | Brief 路径 |
+|---|---|
+| `frontend-styling-stack` | `openspec/notes/homepage/frontend-styling-stack.md` |
+| `homepage-shell` | `openspec/notes/homepage/homepage-shell.md` |
+| `homepage-hero` | `openspec/notes/homepage/homepage-hero.md` |
+| `homepage-feature-nav` | `openspec/notes/homepage/homepage-feature-nav.md` |
+| `homepage-city-grid` | `openspec/notes/homepage/homepage-city-grid.md` |
+| `homepage-hot-posts` | `openspec/notes/homepage/homepage-hot-posts.md` |
+| `homepage-hot-spots` | `openspec/notes/homepage/homepage-hot-spots.md` |
+| `homepage-ai-launcher` | `openspec/notes/homepage/homepage-ai-launcher.md` |
+
 ## 质量底线
 
 - 所有改动走 TDD（见 `.qoder/skills/test-driven-development/`）。
