@@ -41,8 +41,9 @@ my-first-project
 | 后端构建 | Maven 单模块 (`backend/pom.xml`) | groupId `com.mooc`、artifactId `app`、打包 jar |
 | 后端测试 | JUnit 5 + Spring Boot Test (`@WebMvcTest`) | 切片测试为主，避免全量上下文 |
 | 前端框架 | React 19 + Next.js 16 (App Router) + TypeScript 5 | 薄 BFF 路由：`app/page.tsx` Server Component 预取，`app/HelloMessage.tsx` Client Component 呈现 |
+| 前端样式 | Tailwind CSS 4 + shadcn/ui (base-nova / neutral) + lucide-react | shadcn 提供 a11y / 设计 token / Radix 实现；lucide 统一图标 |
 | 前端构建 | Next.js 16 内建 (`frontend/`) | dev server 起于 3000（8080 为后端，被占时自动 fallback 到下一个可用端口） |
-| 前端测试 | Vitest + @testing-library/react + jsdom | Server Component 不可直接 render，需抽为 Client Component 后覆盖 |
+| 前端测试 | Vitest + @testing-library/react + happy-dom | Server Component 不可直接 render，需抽为 Client Component 后覆盖 |
 | BFF 调用 | `frontend/lib/backend.ts`（`import 'server-only'`） | Server Component 中用 `fetchFromBackend('/api/...')` 调后端，无 CORS 问题 |
 | 环境变量 | `frontend/.env.local`（不入仓） | `BACKEND_URL=http://localhost:8080` |
 | Node 运行时 | Node.js ≥ 20.19 | Next.js 16 要求 |

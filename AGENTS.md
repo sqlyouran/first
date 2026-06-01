@@ -88,6 +88,7 @@ frontend 同理。
 | 层 | 选型 | 决定性理由 |
 |---|---|---|
 | 前端 | **React 19 + Next.js 16（App Router）+ TypeScript** | SSR/SEO 能力 + 文件路由约定 + Vercel 原生部署；Next.js 仅作薄 BFF，不承担业务逻辑 |
+| 样式 | **Tailwind CSS 4 + shadcn/ui (base-nova / neutral) + lucide-react** | shadcn 提供 a11y / 设计 token / Radix 实现；lucide 统一图标 |
 | 后端 | **Spring Boot 3.3.x** | 团队经验 + 生态完备 + 分层约定强 + 长期可维护 |
 | 接口契约 | **OpenAPI / springdoc-openapi** | 后端生成 schema，前端用 `openapi-typescript` 生成 TS 类型，弥补跨语言上下文 |
 | 数据库 | Postgres | OLTP + JSON 兼容 |
@@ -96,6 +97,7 @@ frontend 同理。
 
 - ❌ 把后端切到 Next.js API Routes / Server Actions（仅适用于短周期 MVP，不适用本项目长期场景）
 - ❌ 把前端切到 Vue / Nuxt / Svelte 等非 React 系（团队学习成本归零原则）
+- ❌ 引入 Tailwind + shadcn/ui + lucide-react 之外的其它 CSS 方案（styled-components / emotion / vanilla-extract / MUI / Chakra / Ant Design 等）
 - ❌ 用 "AI 生成质量更高" 单一理由推翻已锁定栈（须同时满足长期工程性维度）
 
 #### Next.js BFF 边界（必读约束）
