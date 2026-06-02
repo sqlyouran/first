@@ -95,10 +95,10 @@
 
 ## 6. 归档（archive 时同步主 specs）
 
-- [ ] 6.1 archive 阶段：将本 change 的 delta `specs/homepage-shell/spec.md` MODIFIED 应用到主 spec
-- [ ] 6.2 archive 阶段：将本 change 的 ADDED 全部写入新主 spec `openspec/specs/homepage-hero/spec.md`
-- [ ] 6.3 移动 `openspec/changes/homepage-hero/` → `openspec/changes/archive/<YYYY-MM-DD>-homepage-hero/`
-- [ ] 6.4 父仓提交归档：`chore(openspec): archive homepage-hero`
+- [x] 6.1 archive 阶段：将本 change 的 delta `specs/homepage-shell/spec.md` MODIFIED 应用到主 spec
+- [x] 6.2 archive 阶段：将本 change 的 ADDED 全部写入新主 spec `openspec/specs/homepage-hero/spec.md`
+- [x] 6.3 移动 `openspec/changes/homepage-hero/` → `openspec/changes/archive/<YYYY-MM-DD>-homepage-hero/`
+- [x] 6.4 父仓提交归档：`chore(openspec): archive homepage-hero`
 
 ## 7. 后续（不在本变更范围）
 
