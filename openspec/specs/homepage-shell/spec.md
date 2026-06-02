@@ -1,6 +1,6 @@
 # homepage-shell Spec
 
-> 首页骨架（Wanderchina 主页 6 region 容器契约）。本 spec 定义 `frontend/app/page.tsx` 与 `frontend/app/layout.tsx` 在「骨架阶段」必须满足的结构契约：5 个页内 region + 1 个 layout 常驻 ai-launcher，全部为完全空容器。后续每个 region 的内容、数据、样式由独立 capability（`homepage-hero` / `homepage-feature-nav` / `homepage-city-grid` / `homepage-hot-posts` / `homepage-hot-spots` / `homepage-ai-launcher`）分别承载。
+> 首页骨架（Wanderchina 主页 6 region 容器契约）。本 spec 定义 `frontend/app/page.tsx` 与 `frontend/app/layout.tsx` 在「骨架阶段」必须满足的结构契约：5 个页内 region + 1 个 layout 常驻 ai-launcher。各 region 的具体内容、数据、样式由独立 capability（`homepage-hero` / `homepage-feature-nav` / `homepage-city-grid` / `homepage-hot-posts` / `homepage-hot-spots` / `homepage-ai-launcher`）分别承载。
 
 ## Requirements
 
@@ -24,7 +24,7 @@
 
 ### Requirement: Layout 必须挂载 ai-launcher 常驻槽位
 
-`app/layout.tsx` SHALL mount `<AiLauncherSlot />` after `{children}` inside `<body>`. The ai-launcher slot MUST appear in the rendered HTML on every route, after all page content.
+`app/layout.tsx` SHALL mount `<AiLauncherSlot />` after `{children}` inside `<body>`. The ai-launcher slot MUST appear in the rendered HTML on every route, after all page content. The ai-launcher container MUST contain exactly one `<button>` child element (its content contract is defined by `homepage-ai-launcher`).
 
 #### Scenario: layout 渲染 ai-launcher 在 children 之后
 
@@ -33,61 +33,20 @@
 - **THEN** `container.querySelector('[data-region="ai-launcher"]')` 非 null
 - **AND** DOM 顺序上 `[data-region="ai-launcher"]` 节点出现在 `[data-testid="children-marker"]` 之后
 
+#### Scenario: ai-launcher 容器内含 1 个 button（断言强化）
+
+- **GIVEN** layout 已按 homepage-shell apply 修改 + AiLauncherSlot 已按 homepage-ai-launcher 改写
+- **WHEN** 测试渲染 layout 后查 `container.querySelectorAll('[data-region="ai-launcher"] button')`
+- **THEN** NodeList 长度恰好为 `1`
+- **AND** 该 `<button>` 的 `textContent.trim().length > 0`
+
 #### Scenario: 跨 SSR 链路 ai-launcher 槽位存在
 
 - **GIVEN** 前端 dev server 已起
 - **WHEN** `curl -s http://localhost:<port>/`
 - **THEN** 响应 HTML 中存在恰好 1 个 `data-region="ai-launcher"` 元素
 - **AND** 该元素位于 5 个页内 region 之后
-
----
-
-### Requirement: 所有 Slot 必须为完全空容器
-
-Every region slot component (AiLauncherSlot) SHALL render a single empty container element with attributes `data-region="<name>"` and `aria-label="<name> placeholder"`. The container MUST have zero child nodes and MUST NOT carry any inline style or className. **HeroSlot, FeatureNavSlot, CityGridSlot, HotPostsSlot and HotSpotsSlot are excluded from this constraint**: their content contracts are governed by their respective capability specs.
-
-#### Scenario: Slot 独立渲染产物为空（仅 AiLauncherSlot 仍空）
-
-- **GIVEN** 唯一仍空的 Slot 组件 AiLauncherSlot
-- **WHEN** RTL 独立 `render(<AiLauncherSlot />)`
-- **THEN** 渲染出唯一一个带 `data-region` + `aria-label` 的容器元素
-- **AND** 容器 `childNodes.length === 0`
-- **AND** 容器无 `style` 属性、无 `class` / `className` 属性
-
-#### Scenario: ai-launcher 容器为 div
-
-- **GIVEN** AiLauncherSlot 已渲染
-- **THEN** 根容器 tagName 为 `DIV`
-
-#### Scenario: HeroSlot 不再受空容器约束
-
-- **WHEN** RTL 渲染 `<HeroSlot />`
-- **THEN** 根 section 仍带 `data-region="hero"`，但 `childNodes.length` 可以 `> 0`
-- **AND** 具体内容契约见 `openspec/specs/homepage-hero/spec.md`
-
-#### Scenario: FeatureNavSlot 不再受空容器约束
-
-- **WHEN** RTL 渲染 `<FeatureNavSlot />`
-- **THEN** 根 section 仍带 `data-region="feature-nav"`，但 `childNodes.length` 可以 `> 0`
-- **AND** 具体内容契约见 `openspec/specs/homepage-feature-nav/spec.md`
-
-#### Scenario: CityGridSlot 不再受空容器约束
-
-- **WHEN** RTL 渲染 `<CityGridSlot />`
-- **THEN** 根 section 仍带 `data-region="city-grid"`，但 `childNodes.length` 可以 `> 0`
-- **AND** 具体内容契约见 `openspec/specs/homepage-city-grid/spec.md`
-
-#### Scenario: HotPostsSlot 不再受空容器约束
-
-- **WHEN** RTL 渲染 `<HotPostsSlot />`
-- **THEN** 根 section 仍带 `data-region="hot-posts"`，但 `childNodes.length` 可以 `> 0`
-- **AND** 具体内容契约见 `openspec/specs/homepage-hot-posts/spec.md`
-
-#### Scenario: HotSpotsSlot 不再受空容器约束
-
-- **WHEN** RTL 渲染 `<HotSpotsSlot />`
-- **THEN** 根 section 仍带 `data-region="hot-spots"`，但 `childNodes.length` 可以 `> 0`
-- **AND** 具体内容契约见 `openspec/specs/homepage-hot-spots/spec.md`
+- **AND** 该元素内含 1 个 `<button>` 节点
 
 ---
 

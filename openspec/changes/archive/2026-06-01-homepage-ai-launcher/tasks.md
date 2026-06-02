@@ -113,12 +113,12 @@
 
 ## 7. 归档（archive 时同步主 specs — 收尾操作）
 
-- [ ] 7.1 archive 阶段：从主 spec `openspec/specs/homepage-shell/spec.md` 中**整条删除**"所有 Slot 必须为完全空容器" Requirement（不留空骨架）
-- [ ] 7.2 archive 阶段：把 MODIFIED delta（"Layout 必须挂载 ai-launcher 常驻槽位"的强化版本，含 button 断言场景）应用到主 spec
-- [ ] 7.3 archive 阶段：把 ADDED 全部写入新主 spec `openspec/specs/homepage-ai-launcher/spec.md`
-- [ ] 7.4 移动 change 目录到 `openspec/changes/archive/<YYYY-MM-DD>-homepage-ai-launcher/`
-- [ ] 7.5 父仓提交归档：`chore(openspec): archive homepage-ai-launcher`
-- [ ] 7.6 archive 后核查：`openspec/specs/homepage-shell/spec.md` 中**无**"完全空容器" Requirement，**无**"FeatureNavSlot is excluded" 等过渡描述
+- [x] 7.1 archive 阶段：从主 spec `openspec/specs/homepage-shell/spec.md` 中**整条删除**"所有 Slot 必须为完全空容器" Requirement（不留空骨架）
+- [x] 7.2 archive 阶段：把 MODIFIED delta（"Layout 必须挂载 ai-launcher 常驻槽位"的强化版本，含 button 断言场景）应用到主 spec
+- [x] 7.3 archive 阶段：把 ADDED 全部写入新主 spec `openspec/specs/homepage-ai-launcher/spec.md`
+- [x] 7.4 移动 change 目录到 `openspec/changes/archive/<YYYY-MM-DD>-homepage-ai-launcher/`
+- [x] 7.5 父仓提交归档：`chore(openspec): archive homepage-ai-launcher`
+- [x] 7.6 archive 后核查：`openspec/specs/homepage-shell/spec.md` 中**无**"完全空容器" Requirement，**无**"FeatureNavSlot is excluded" 等过渡描述
 
 ## 8. 后续（不在本变更范围）
 
