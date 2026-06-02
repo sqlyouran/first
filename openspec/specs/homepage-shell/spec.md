@@ -126,11 +126,34 @@ When this change is archived, `openspec/specs/http-server/spec.md` SHALL be upda
 #### Scenario: http-server spec 同步更新
 
 - **WHEN** archive 完成后查 `openspec/specs/http-server/spec.md`
-- **THEN** 该 spec 中"通过前端 Next.js SSR 调后端访问"场景的断言不再要求首页 HTML 含 `<h1>hello`
+- **THEN** 该 spec 中“通过前端 Next.js SSR 调后端访问”场景的断言不再要求首页 HTML 含 `<h1>hello`
 - **AND** spec 中显式声明 HelloMessage 链路由 `HelloMessage.test.tsx` 单测覆盖
 
-#### Scenario: http-server spec 同步更新
+---
 
-- **WHEN** archive 完成后查 `openspec/specs/http-server/spec.md`
-- **THEN** 该 spec 中"通过前端 Next.js SSR 调后端访问"场景的断言不再要求首页 HTML 含 `<h1>hello`
-- **AND** spec 中显式声明 HelloMessage 链路由 `HelloMessage.test.tsx` 单测覆盖
+### Requirement: 页面级视觉契约（homepage-visual-v1 新增）
+
+All region slots SHALL conform to a shared page-level visual contract defined in `app/globals.css`. This contract includes: font stack (Inter for body, Plus Jakarta Sans for display headings), primary color (indigo / blue-700), section spacing (96px desktop / 64px mobile), and responsive 3-breakpoint system (mobile < 768 / tablet 768-1023 / desktop ≥ 1024).
+
+#### Scenario: 字体 stack 正确
+
+- **WHEN** 检视 `app/layout.tsx` 和 `app/globals.css`
+- **THEN** `next/font/google` 引入 Inter 和 Plus Jakarta Sans
+- **AND** `:root` CSS 变量定义 `--font-sans` 和 `--font-display`
+- **AND** `body` 使用 `--font-sans`，`h1-h3` 使用 `--font-display`
+
+#### Scenario: 主色为靛青
+
+- **WHEN** 检视 `app/globals.css`
+- **THEN** `:root` CSS 变量定义 `--color-primary: #1d4ed8`（Tailwind blue-700）
+
+#### Scenario: section 间距正确
+
+- **WHEN** 检视 `app/globals.css`
+- **THEN** `section[data-region]` 的 `padding-block` 在 mobile（< 1024px）为 64px，desktop（≥ 1024px）为 96px
+
+#### Scenario: 响应式 3 断点
+
+- **WHEN** 检视所有 Slot 组件的 Tailwind class
+- **THEN** 布局使用 `grid-cols-2` / `md:grid-cols-4` 等断点类名
+- **AND** 断点符合 mobile < 768 / tablet 768-1023 / desktop ≥ 1024 分段
