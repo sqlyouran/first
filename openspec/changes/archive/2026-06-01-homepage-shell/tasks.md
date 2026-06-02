@@ -92,8 +92,8 @@
 
 ## 6. 归档（实现完成后）
 
-- [ ] 6.1 移动 `openspec/changes/homepage-shell/` → `openspec/changes/archive/<YYYY-MM-DD>-homepage-shell/`
-- [ ] 6.2 父仓提交归档动作：`chore(openspec): archive homepage-shell`
+- [x] 6.1 移动 `openspec/changes/homepage-shell/` → `openspec/changes/archive/<YYYY-MM-DD>-homepage-shell/`
+- [x] 6.2 父仓提交归档动作：`chore(openspec): archive homepage-shell`
 
 ## 7. 后续（不在本变更范围）
 
