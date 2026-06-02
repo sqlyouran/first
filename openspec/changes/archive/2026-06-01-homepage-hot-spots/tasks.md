@@ -93,10 +93,10 @@
 
 ## 6. 归档（archive 时同步主 specs）
 
-- [ ] 6.1 archive 阶段：将 delta `specs/homepage-shell/spec.md` MODIFIED 应用到主 spec
-- [ ] 6.2 archive 阶段：将 ADDED 全部写入新主 spec `openspec/specs/homepage-hot-spots/spec.md`
-- [ ] 6.3 移动 change 目录到 `openspec/changes/archive/<YYYY-MM-DD>-homepage-hot-spots/`
-- [ ] 6.4 父仓提交归档：`chore(openspec): archive homepage-hot-spots`
+- [x] 6.1 archive 阶段：将 delta `specs/homepage-shell/spec.md` MODIFIED 应用到主 spec
+- [x] 6.2 archive 阶段：将 ADDED 全部写入新主 spec `openspec/specs/homepage-hot-spots/spec.md`
+- [x] 6.3 移动 change 目录到 `openspec/changes/archive/<YYYY-MM-DD>-homepage-hot-spots/`
+- [x] 6.4 父仓提交归档：`chore(openspec): archive homepage-hot-spots`
 
 ## 7. 后续（不在本变更范围）
 
