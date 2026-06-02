@@ -22,9 +22,10 @@ The backend service SHALL expose a `GET /api/hello` endpoint that returns HTTP `
 
 - **GIVEN** 后端已在 8080 启动
 - **AND** 前端 `npm run dev` 已在 3000（或 fallback 端口）启动，`frontend/.env.local` 包含 `BACKEND_URL=http://localhost:8080`
-- **WHEN** 浏览器加载 `http://localhost:3000/`，`app/page.tsx`（Server Component）调用 `fetchFromBackend('/api/hello')`
-- **THEN** Next.js Server Component 在服务端拼 `BACKEND_URL + /api/hello` 后端 fetch（无 CORS）
-- **AND** SSR 返回的初始 HTML 中包含 `<h1>hello</h1>`（验证 SSR 生效，非 hydrate 后才出现）
+- **WHEN** 运行 `cd frontend && npm test`，`HelloMessage.test.tsx` 加载 `app/HelloMessage.tsx`（client component）并 `render(<HelloMessage message="hello" />)`
+- **THEN** 测试断言 `<h1>hello</h1>` 存在，表明 SSR 链路上的呈现代码路径仍可达
+- **AND** `frontend/lib/backend.ts` 首行仍为 `import "server-only";`，作为 BFF 边界守护存在
+- **NOTE** 自 `homepage-shell` 变更起，首页 UI（`app/page.tsx`）不再渲染 HelloMessage。HelloMessage 的 SSR 链路覆盖从“首页 UI 出现 hello”调整为“`HelloMessage.test.tsx` 单测断言含 hello”；lib/backend 边界由文件系统存在与首行 `import "server-only";` 守护。后续 `homepage-hero` 接入真实数据后可重建首页 UI 的 SSR 活体覆盖。
 
 #### Scenario: 后端测试切片覆盖该端点
 
