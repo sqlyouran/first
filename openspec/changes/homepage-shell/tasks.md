@@ -81,14 +81,14 @@
 
 ## 5. 验证清单（端到端）
 
-- [ ] 5.1 `cd frontend && npm test` 全绿
-- [ ] 5.2 `cd frontend && npm run build` 通过
-- [ ] 5.3 `find frontend/app -name 'route.ts' -o -name 'route.tsx'` 输出为空
-- [ ] 5.4 `head -1 frontend/lib/backend.ts` 输出 `import "server-only";`
-- [ ] 5.5 `frontend/app/HelloMessage.tsx` 与 `HelloMessage.test.tsx` 文件存在、内容未变
-- [ ] 5.6 `frontend/app/page.tsx` 中**未** import `HelloMessage` 或 `fetchFromBackend`
-- [ ] 5.7 `frontend/app/regions/` 下恰好 6 个 `*.tsx`（HeroSlot / FeatureNavSlot / CityGridSlot / HotPostsSlot / HotSpotsSlot / AiLauncherSlot）
-- [ ] 5.8 父仓 `git diff --stat origin/main..HEAD` 仅含治理文档（http-server/spec.md）+ submodule 指针 + 本 change 4 件套，无其它业务代码外漏
+- [x] 5.1 `cd frontend && npm test` 全绿
+- [x] 5.2 `cd frontend && npm run build` 通过
+- [x] 5.3 `find frontend/app -name 'route.ts' -o -name 'route.tsx'` 输出为空
+- [x] 5.4 `head -1 frontend/lib/backend.ts` 输出 `import "server-only";`
+- [x] 5.5 `frontend/app/HelloMessage.tsx` 与 `HelloMessage.test.tsx` 文件存在、内容未变
+- [x] 5.6 `frontend/app/page.tsx` 中**未** import `HelloMessage` 或 `fetchFromBackend`
+- [x] 5.7 `frontend/app/regions/` 下恰好 6 个 `*.tsx`（HeroSlot / FeatureNavSlot / CityGridSlot / HotPostsSlot / HotSpotsSlot / AiLauncherSlot）
+- [x] 5.8 父仓 `git diff --stat origin/main..HEAD` 仅含治理文档（http-server/spec.md）+ submodule 指针 + 本 change 4 件套，无其它业务代码外漏
 
 ## 6. 归档（实现完成后）
 
