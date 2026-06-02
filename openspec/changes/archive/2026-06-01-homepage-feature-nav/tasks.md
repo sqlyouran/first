@@ -81,10 +81,10 @@
 
 ## 6. 归档（archive 时同步主 specs）
 
-- [ ] 6.1 archive 阶段：将本 change 的 delta `specs/homepage-shell/spec.md` MODIFIED 应用到 `openspec/specs/homepage-shell/spec.md`（覆写"所有 Slot 必须为完全空容器"该 Requirement）
-- [ ] 6.2 archive 阶段：将本 change 的 ADDED 全部写入新主 spec `openspec/specs/homepage-feature-nav/spec.md`
-- [ ] 6.3 移动 `openspec/changes/homepage-feature-nav/` → `openspec/changes/archive/<YYYY-MM-DD>-homepage-feature-nav/`
-- [ ] 6.4 父仓提交归档：`chore(openspec): archive homepage-feature-nav`
+- [x] 6.1 archive 阶段：将本 change 的 delta `specs/homepage-shell/spec.md` MODIFIED 应用到 `openspec/specs/homepage-shell/spec.md`（覆写"所有 Slot 必须为完全空容器"该 Requirement）
+- [x] 6.2 archive 阶段：将本 change 的 ADDED 全部写入新主 spec `openspec/specs/homepage-feature-nav/spec.md`
+- [x] 6.3 移动 `openspec/changes/homepage-feature-nav/` → `openspec/changes/archive/<YYYY-MM-DD>-homepage-feature-nav/`
+- [x] 6.4 父仓提交归档：`chore(openspec): archive homepage-feature-nav`
 
 ## 7. 后续（不在本变更范围）
 
