@@ -4,31 +4,48 @@
 
 ## 项目名称
 
-my-first-project
+Wanderchina
 
 ## 愿景
 
-> 待你填写：一句话说清这个项目要解决什么问题、给谁用。
+> 让境外旅行者发现旅行指南之外的中国。
+>
+> Wanderchina 是一个面向境外用户的入境中国旅游目的地探索平台。
+> 通过城市导览、深度攻略、小众景点与 AI 行程规划，
+> 帮助非中国用户规划并发现"明信片之外"的中国旅行体验。
+>
+> 对标：Visit Japan / Tourism New Zealand / Discover Vietnam 等国际目的地营销站。
 
 ## 范围（in scope）
 
-> 待你填写：明确做什么。例如：
-> - 一个命令行工具，输入 X 输出 Y
-> - 一个 Web 服务，提供 A/B/C 三个 API
+- **城市导览**：中国主要旅游城市卡片，含地理信息、最佳季节、概览描述。
+- **旅行攻略**：英文深度游记 / 路线攻略，含标题、封面图、标签、摘要。
+- **小众景点推荐**：非常规目的地推荐（Off-the-Beaten-Path Spots），强调深度体验。
+- **AI 行程规划助手**：常驻式 AI 入口（跨页面），辅助用户生成行程、回答旅行问题。
+- **内容语言策略**：英文为主、中文为辅——标题 / 导航 / CTA 全英文，内容卡片英文主标题 + 中文地名副标。
+- **后端 HTTP API**：Spring Boot 提供城市 / 攻略 / 景点的 CRUD 与搜索接口，供前端 SSR 预取。
+- **部署形态**：前端 Vercel / 后端 Docker 自托管。
 
 ## 非目标（out of scope）
 
-> 待你填写：明确**不**做什么，避免日后争论。例如：
-> - 不提供图形界面
-> - 不支持 Windows
-> - 不做用户登录
+- **OTA 交易**：本期不做机票 / 酒店 / 门票预订与支付，但不排除后续版本。
+- **UGC 社区**：不做用户发帖、评论、点赞、关注等社交功能。
+- **中文用户主界面**：当前产品定位面向境外用户，中文 UI 版本不在本期范围内。
+- **移动端 App**：仅提供响应式 Web 端，不开发 iOS / Android 原生 App。
+- **实时地图**：不内嵌交互式地图（仅展示静态位置信息 + 外链跳转至 Google Maps / 高德）。
+- **后端内容管理系统**：本期内容以硬编码 / 数据库种子数据为主，不搭建 CMS 后台。
 
 ## 关键术语
 
 | 术语 | 含义 |
 |---|---|
-| <Term1> | <定义> |
-| <Term2> | <定义> |
+| Region Slot | 首页 6 个内容区块的统称（hero / feature-nav / city-grid / hot-posts / hot-spots / ai-launcher），由 `homepage-shell` 定义挂载契约 |
+| City Card | 城市导览卡片，`city-grid` 区块的核心 UI 单元，含城市名、封面图、简要描述 |
+| Story | 旅行攻略条目，`hot-posts` 区块展示，含标题 / 封面图 / 摘要 / 标签 |
+| Hidden Spot | 小众景点，`hot-spots` 区块展示，强调深度 / 非旅游团体验 |
+| AI Launcher | AI 行程助手入口按钮，跨页面常驻于 layout，点击后打开对话界面 |
+| BFF | Browser-For-Frontend，前端 Next.js 薄层，负责 SSR 预取与接口聚合，不承担业务逻辑 |
+| Capability Spec | OpenSpec 体系中一个独立能力单元的规格文档，对应 `openspec/specs/<capability>/spec.md` |
 
 ## 技术栈
 
