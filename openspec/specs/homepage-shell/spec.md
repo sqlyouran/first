@@ -44,20 +44,20 @@
 
 ### Requirement: 所有 Slot 必须为完全空容器
 
-Every region slot component (CityGridSlot / HotPostsSlot / HotSpotsSlot / AiLauncherSlot) SHALL render a single empty container element with attributes `data-region="<name>"` and `aria-label="<name> placeholder"`. The container MUST have zero child nodes and MUST NOT carry any inline style or className. **HeroSlot and FeatureNavSlot are excluded from this constraint**: their content contracts are governed by the `homepage-hero` and `homepage-feature-nav` capability specs respectively.
+Every region slot component (HotPostsSlot / HotSpotsSlot / AiLauncherSlot) SHALL render a single empty container element with attributes `data-region="<name>"` and `aria-label="<name> placeholder"`. The container MUST have zero child nodes and MUST NOT carry any inline style or className. **HeroSlot, FeatureNavSlot and CityGridSlot are excluded from this constraint**: their content contracts are governed by their respective capability specs.
 
-#### Scenario: Slot 独立渲染产物为空（4 个仍空 Slot）
+#### Scenario: Slot 独立渲染产物为空（3 个仍空 Slot）
 
-- **GIVEN** 任意非 HeroSlot / 非 FeatureNavSlot 的 Slot 组件（CityGridSlot / HotPostsSlot / HotSpotsSlot / AiLauncherSlot）
-- **WHEN** RTL 独立 `render(<CityGridSlot />)`（其它 3 个仍空 Slot 同理）
+- **GIVEN** 任意非 HeroSlot / 非 FeatureNavSlot / 非 CityGridSlot 的 Slot 组件（HotPostsSlot / HotSpotsSlot / AiLauncherSlot）
+- **WHEN** RTL 独立 `render(<HotPostsSlot />)`（其它 2 个仍空 Slot 同理）
 - **THEN** 渲染出唯一一个带 `data-region` + `aria-label` 的容器元素
 - **AND** 容器 `childNodes.length === 0`
 - **AND** 容器无 `style` 属性、无 `class` / `className` 属性
 
-#### Scenario: 3 个仍空的页内 Slot 容器为 section，ai-launcher 容器为 div
+#### Scenario: 2 个仍空的页内 Slot 容器为 section，ai-launcher 容器为 div
 
-- **GIVEN** 任意非 HeroSlot / 非 FeatureNavSlot 的 Slot 已渲染
-- **THEN** CityGridSlot / HotPostsSlot / HotSpotsSlot 的根容器 tagName 为 `SECTION`
+- **GIVEN** 任意非 HeroSlot / 非 FeatureNavSlot / 非 CityGridSlot 的 Slot 已渲染
+- **THEN** HotPostsSlot / HotSpotsSlot 的根容器 tagName 为 `SECTION`
 - **AND** AiLauncherSlot 的根容器 tagName 为 `DIV`
 
 #### Scenario: HeroSlot 不再受空容器约束
@@ -71,6 +71,12 @@ Every region slot component (CityGridSlot / HotPostsSlot / HotSpotsSlot / AiLaun
 - **WHEN** RTL 渲染 `<FeatureNavSlot />`
 - **THEN** 根 section 仍带 `data-region="feature-nav"`，但 `childNodes.length` 可以 `> 0`
 - **AND** 具体内容契约见 `openspec/specs/homepage-feature-nav/spec.md`
+
+#### Scenario: CityGridSlot 不再受空容器约束
+
+- **WHEN** RTL 渲染 `<CityGridSlot />`
+- **THEN** 根 section 仍带 `data-region="city-grid"`，但 `childNodes.length` 可以 `> 0`
+- **AND** 具体内容契约见 `openspec/specs/homepage-city-grid/spec.md`
 
 ---
 
@@ -146,6 +152,12 @@ The `frontend/app/` directory SHALL NOT contain any `route.ts` or `route.tsx` fi
 ### Requirement: 治理文档必须随 archive 同步更新
 
 When this change is archived, `openspec/specs/http-server/spec.md` SHALL be updated so that the "通过前端 Next.js SSR 调后端访问" scenario no longer asserts the homepage UI contains the hello text. The HelloMessage SSR linkage MUST instead be guarded by `HelloMessage.test.tsx` unit test.
+
+#### Scenario: http-server spec 同步更新
+
+- **WHEN** archive 完成后查 `openspec/specs/http-server/spec.md`
+- **THEN** 该 spec 中"通过前端 Next.js SSR 调后端访问"场景的断言不再要求首页 HTML 含 `<h1>hello`
+- **AND** spec 中显式声明 HelloMessage 链路由 `HelloMessage.test.tsx` 单测覆盖
 
 #### Scenario: http-server spec 同步更新
 
