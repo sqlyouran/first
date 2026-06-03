@@ -33,12 +33,14 @@
 - **THEN** `container.querySelector('[data-region="ai-launcher"]')` 非 null
 - **AND** DOM 顺序上 `[data-region="ai-launcher"]` 节点出现在 `[data-testid="children-marker"]` 之后
 
-#### Scenario: ai-launcher 容器内含 1 个 button（断言强化）
+#### Scenario: ai-launcher 容器内含至少 2 个 button（visual-v1 修正）
 
-- **GIVEN** layout 已按 homepage-shell apply 修改 + AiLauncherSlot 已按 homepage-ai-launcher 改写
+> **homepage-visual-v1 修正**：原骨架阶段约定“恰好 1 个 button”，visual-v1 引入 Dialog/Sheet 双形态后变为 2 个 button（desktop trigger + mobile trigger）。
+
+- **GIVEN** layout 已按 homepage-shell apply 修改 + AiLauncherSlot 已按 homepage-ai-launcher 改写 + homepage-visual-v1 已应用
 - **WHEN** 测试渲染 layout 后查 `container.querySelectorAll('[data-region="ai-launcher"] button')`
-- **THEN** NodeList 长度恰好为 `1`
-- **AND** 该 `<button>` 的 `textContent.trim().length > 0`
+- **THEN** NodeList 长度 ≥ `2`
+- **AND** 每个 `<button>` 的 `textContent.trim().length > 0`
 
 #### Scenario: 跨 SSR 链路 ai-launcher 槽位存在
 
@@ -145,7 +147,8 @@ All region slots SHALL conform to a shared page-level visual contract defined in
 #### Scenario: 主色为靛青
 
 - **WHEN** 检视 `app/globals.css`
-- **THEN** `:root` CSS 变量定义 `--color-primary: #1d4ed8`（Tailwind blue-700）
+- **THEN** `:root` CSS 变量定义 `--color-brand: #1d4ed8`（Tailwind blue-700）
+- **AND** shadcn `--primary` token 映射为 `oklch(0.488 0.243 264.376)`（靛青色相）
 
 #### Scenario: section 间距正确
 

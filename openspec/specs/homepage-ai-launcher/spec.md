@@ -8,9 +8,11 @@
 
 ## Requirements
 
-### Requirement: ai-launcher 容器必须为 div 且渲染恰好 1 个 `<button>` 子节点
+### Requirement: ai-launcher 容器必须为 div 且渲染至少 1 个 `<button>` 子节点
 
-`AiLauncherSlot` SHALL render a single root `<div data-region="ai-launcher">` containing exactly one `<button>` element as its child node. The `<button>` MUST carry non-empty `textContent` (the button label). The container MUST NOT carry the `aria-label="ai-launcher placeholder"` attribute that existed under the empty-container contract.
+> **homepage-visual-v1 修正**：原骨架阶段约定“恰好 1 个 button”，visual-v1 引入 Dialog/Sheet 双形态后变为 2 个 button（desktop trigger + mobile trigger）。容器约束不变。
+
+`AiLauncherSlot` SHALL render a single root `<div data-region="ai-launcher">` containing at least one `<button>` element. Each `<button>` MUST carry non-empty `textContent` (the button label). The container MUST NOT carry the `aria-label="ai-launcher placeholder"` attribute that existed under the empty-container contract.
 
 #### Scenario: ai-launcher 容器仍存在且为 div
 
@@ -19,11 +21,11 @@
 - **THEN** `container.querySelector('[data-region="ai-launcher"]')` 非 null
 - **AND** 该节点 tagName 为 `DIV`
 
-#### Scenario: 1 个 `<button>` 子节点
+#### Scenario: 至少 1 个 `<button>` 子节点
 
 - **WHEN** RTL 渲染 `<AiLauncherSlot />` 并查 `container.querySelectorAll('div[data-region="ai-launcher"] button')`
-- **THEN** NodeList 长度恰好为 `1`
-- **AND** 该 `<button>` 的 `textContent.trim().length > 0`
+- **THEN** NodeList 长度 ≥ `1`
+- **AND** 每个 `<button>` 的 `textContent.trim().length > 0`
 
 #### Scenario: aria-label placeholder 属性已移除
 
@@ -52,22 +54,24 @@ The ai-launcher content SHALL be sourced from a hard-coded TypeScript constant a
 
 ### Requirement: 占位 button 必须不绑定业务逻辑
 
-The placeholder `<button>` SHALL NOT carry any `onClick` handler that invokes business logic, navigation, or backend calls. It MAY remain unbound or carry a no-op handler. This change MUST NOT introduce any business route path (e.g., `/ai`, `/assistant`) and MUST NOT introduce any new client-side state management.
+> **homepage-visual-v1 MODIFIED**：原 R3 约束“未引入客户端状态管理”，visual-v1 引入 `useState` 用于 Dialog/Sheet 开关状态，不违反业务逻辑约束。button 的 onClick 仅调用 `setOpen(true)` 打开占位 Dialog/Sheet，无业务导航。
+
+The placeholder `<button>` SHALL NOT carry any `onClick` handler that invokes business logic, navigation, or backend calls. It MAY open a Dialog / Sheet with placeholder content. This change MUST NOT introduce any business route path (e.g., `/ai`, `/assistant`).
 
 #### Scenario: button 无业务 onClick
 
 - **WHEN** 检视 `frontend/app/regions/AiLauncherSlot.tsx`
-- **THEN** 文件中 `<button>` 节点不绑定任何 `onClick={...}`，或仅绑定 `onClick={() => {}}` 形式的 noop
+- **THEN** 文件中 `<button>` / `<DialogTrigger>` / `<SheetTrigger>` 的 `onClick` 仅调用 `setOpen(true)` 或无 onClick（由 shadcn Trigger 内部处理）
+- **AND** Dialog/Sheet 内容为占位文本，无真实业务导航
 
 #### Scenario: 未引入业务路由文件
 
 - **WHEN** `find frontend/app -mindepth 2 -name 'page.tsx'`（排除 `app/page.tsx`）
 - **THEN** 输出为空
 
-#### Scenario: 未引入客户端状态管理依赖
+#### Scenario: 未引入客户端状态管理依赖（已废弃）
 
-- **WHEN** 比对本变更前后的 `frontend/package.json` 的 `dependencies` 与 `devDependencies` 字段
-- **THEN** 两份列表完全一致（无 zustand / jotai / redux 等新引入）
+> 此 Scenario 已被 visual-v1 废弃。`useState` 仅用于 Dialog/Sheet open 状态，不属于业务状态管理。不再断言 package.json 无变化。
 
 ---
 
