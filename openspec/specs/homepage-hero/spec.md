@@ -5,9 +5,11 @@
 
 ## Requirements
 
-### Requirement: hero region 必须渲染 1 个 `<h1>` 与 1 个 `<button>` 子节点
+### Requirement: hero region 必须渲染 1 个 `<h1>` 与至少 1 个 `<button>` 子节点
 
-`HeroSlot` SHALL render a single root `<section data-region="hero">` containing exactly one `<h1>` element and exactly one `<button>` element. The `<h1>` MUST carry non-empty `textContent` (the title); the `<button>` MUST carry non-empty `textContent` (the CTA label).
+> **homepage-visual-v1 修正**：原骨架阶段约定“恰好 1 个 button”（CTA），visual-v1 引入搜索按钮后，button 数量变为 ≥ 1。h1 约束不变。
+
+`HeroSlot` SHALL render a single root `<section data-region="hero">` containing exactly one `<h1>` element and at least one `<button>` element. The `<h1>` MUST carry non-empty `textContent` (the title); at least one `<button>` MUST carry a visible icon (SVG from lucide-react).
 
 #### Scenario: hero region 容器仍存在
 
@@ -22,11 +24,12 @@
 - **THEN** NodeList 长度恰好为 `1`
 - **AND** 该 `<h1>` 的 `textContent.trim().length > 0`
 
-#### Scenario: 1 个 `<button>` CTA 子节点
+#### Scenario: 至少 1 个 `<button>` 子节点含 SVG 图标
 
 - **WHEN** RTL 渲染 `<HeroSlot />` 并查 `container.querySelectorAll('section[data-region="hero"] button')`
-- **THEN** NodeList 长度恰好为 `1`
-- **AND** 该 `<button>` 的 `textContent.trim().length > 0`
+- **THEN** NodeList 长度 ≥ `1`
+- **AND** 至少 1 个 `<button>` 内含 `<svg>` 元素（lucide-react 图标）
+- **AND** 该 `<svg>` 内含 `path` / `line` / `circle` / `polyline` / `rect` 子元素（非空图标）
 
 ---
 
@@ -49,6 +52,8 @@ The hero content SHALL be sourced from a hard-coded TypeScript constant at `fron
 ---
 
 ### Requirement: CTA 占位锚点必须为严格 `#`
+
+> **homepage-visual-v1 说明**：`ctaHref` / `ctaLabel` 字段保留在 data 中作为未来 CTA 按钮的预留，visual-v1 当前用搜索框替代 CTA，组件不渲染这两个字段，但数据契约仍然有效。
 
 The hero CTA's placeholder link target SHALL be exactly the string `"#"`. This change MUST NOT introduce any business route path (e.g., `/search`, `/flights`).
 
