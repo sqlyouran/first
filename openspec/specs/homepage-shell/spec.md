@@ -141,8 +141,8 @@ All region slots SHALL conform to a shared page-level visual contract defined in
 
 - **WHEN** 检视 `app/layout.tsx` 和 `app/globals.css`
 - **THEN** `next/font/google` 引入 Inter 和 Plus Jakarta Sans
-- **AND** `:root` CSS 变量定义 `--font-sans` 和 `--font-display`
-- **AND** `body` 使用 `--font-sans`，`h1-h3` 使用 `--font-display`
+- **AND** `@theme inline` CSS 变量定义 `--font-sans` 和 `--font-heading`
+- **AND** `body` 使用 `--font-sans`，`h1-h6` 使用 `--font-heading`
 
 #### Scenario: 主色为靛青
 
