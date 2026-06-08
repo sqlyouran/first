@@ -84,6 +84,12 @@
 - **THEN** 页面显示「验证码已过期，请重新发送」
 - **AND** 提供「重新发送」按钮回到 Step 1
 
+#### Scenario: Step 2——邮箱已注册
+
+- **WHEN** 后端返回 HTTP 409 且 `error_code` 为 `email_already_registered`
+- **THEN** 页面显示「该邮箱已注册，请直接登录」
+- **AND** 提供「去登录」链接跳转到 `/login`
+
 #### Scenario: Step 2——注册被限流
 
 - **WHEN** 后端返回 HTTP 429
@@ -109,7 +115,7 @@
 
 ### Requirement: Auth Store（Zustand）
 
-前端使用 Zustand store 管理认证状态，包含 token、用户信息、登录/登出动作。
+前端使用 Zustand store 管理认证状态，包含 token、用户信息、登录/登出动作、会话初始化。
 
 #### Scenario: 登录后 store 更新
 
@@ -121,7 +127,22 @@
 
 - **WHEN** 调用 store 的 `logout` action
 - **THEN** `accessToken` 被清空
+- **AND** `user` 被清空
 - **AND** `isAuthenticated` 变为 `false`
+- **AND** 调用 `POST /api/auth/logout` 通知后端
+
+#### Scenario: fetchMe 写入用户信息
+
+- **WHEN** 调用 store 的 `fetchMe` action 且 accessToken 有效
+- **THEN** 调用 `GET /api/auth/me` 获取用户信息
+- **AND** store 中 `user` 设为 `{ id, email, state, created_at }`
+
+#### Scenario: initialize 恢复会话
+
+- **WHEN** AuthProvider 调用 store 的 `initialize` action
+- **THEN** 尝试调用 `/api/auth/refresh` 获取新 accessToken
+- **AND** 成功后调用 `fetchMe()` 获取用户信息
+- **AND** 无论成功失败，`isInitialized` 设为 `true`
 
 ---
 
