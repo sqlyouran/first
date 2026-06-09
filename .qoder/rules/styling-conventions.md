@@ -45,6 +45,68 @@ alwaysApply: true
 - 图标按钮需搭配 `aria-label` 或可见文字
 - 图片容器用 `aria-hidden="true"`（装饰性）或提供 alt text（内容性）
 
+## 页面完成度
+
+> **MUST 级约束**：每个页面在交付时必须满足以下标准。不接受"功能能跑但视觉裸奔"的 MVP 状态上线——页面必须同时具备专业的视觉美观度与完整的可用性，这是交付底线而非锦上添花。
+
+### 页面结构骨架
+
+所有内容页面（非首页 Region）SHOULD 遵循统一结构：
+
+```
+<div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+  <div className="mx-auto max-w-{N}xl px-8 py-16 sm:px-12 lg:px-16">
+    <!-- 返回导航（可选） -->
+    <!-- 页面标题 + 副标题 -->
+    <!-- 主内容区 -->
+  </div>
+</div>
+```
+
+- **背景层次**：`bg-gradient-to-b from-slate-50 to-white`（微渐变，避免纯白单调）
+- **响应式侧边距**：`px-8 sm:px-12 lg:px-16`（32/48/64px 递进，禁止 `px-4` 以下的贴边感）
+- **内容最大宽度**：列表页 `max-w-5xl`，表单/详情页 `max-w-3xl`
+- **垂直节奏**：页面顶部 `py-16`，内容块间 `space-y-8`
+
+### 页面头部
+
+- **返回导航**：`<Link>` + `<ArrowLeft>` 图标 + `text-blue-700 hover:text-blue-800`
+- **页面标题**：`text-3xl font-bold text-slate-900 lg:text-4xl`
+- **副标题**（可选）：`mt-3 text-base text-slate-500`
+- 标题与内容间距：`mb-10`
+
+### Card 使用规范
+
+- Card 必须**视觉可见**：`shadow-sm border border-slate-200`（不允许无边框无阴影的隐形 Card）
+- 内边距：`p-8`（表单/详情场景），`p-5` ~ `p-6`（列表卡片场景）
+- 长表单采用**单卡片布局**，不按功能拆分多卡片
+- 卡片内各字段组用 `space-y-6` 分隔
+
+### 四态覆盖
+
+页面必须覆盖 4 种状态，不允许空白或浏览器默认样式：
+
+| 状态 | 实现 |
+|------|------|
+| Loading | shadcn `<Skeleton>` 组合 + Card 骨架屏 |
+| Content | 完整内容渲染 |
+| Empty | 居中图标 + 引导文案 + CTA 按钮 |
+| Error | 错误描述 + 重试操作 |
+
+### 图片占位与兜底
+
+- 所有 `backgroundImage` 容器 SHOULD 设置兜底背景色：`bg-slate-100`（浅色场景）/ `bg-slate-800`（深色场景）
+- 无图时使用**渐变占位**：`bg-gradient-to-br from-blue-50 via-slate-50 to-blue-100` + 居中图标
+- 不允许图片加载失败后出现白块
+
+### 表单美化
+
+- 使用 shadcn/ui 组件（Input / Select / Button），不使用原生 `<select>` / `<input>`
+- 表单标签：`text-sm font-medium text-slate-700`
+- 必填标记：`<span className="text-red-500">*</span>`
+- 提交按钮：全宽 `w-full` + 品牌色 `bg-blue-700 hover:bg-blue-800 text-white`
+- 提交中状态：`<Loader2>` 旋转图标 + disabled
+
 ## 工具链
 
 - **CSS 框架**：Tailwind CSS 4（`@import 'tailwindcss'`）
