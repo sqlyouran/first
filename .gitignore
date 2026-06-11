@@ -2,6 +2,9 @@
 .DS_Store
 Thumbs.db
 
+# Screenshots (dev artifacts)
+*.png
+
 # Editors
 .vscode/
 .idea/
