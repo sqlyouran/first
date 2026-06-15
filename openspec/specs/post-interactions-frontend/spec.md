@@ -43,47 +43,59 @@
 
 ### Requirement: 收藏 API 客户端
 
-`lib/api/interactions.ts` SHALL 导出收藏相关 API 函数。
+`lib/api/interactions.ts` SHALL 导出收藏相关 API 函数，接受 `entityId` + `entityType` 参数。URL 通过 `entityPath(entityType)` 辅助函数动态拼接。
 
-#### Scenario: fetchBookmarkStatus 成功
+#### Scenario: fetchBookmarkStatus 帖子
 
-- **WHEN** 调用 `fetchBookmarkStatus(postId)`
-- **THEN** 发送 `GET /api/posts/{postId}/bookmark-status`，使用 `authFetch`
+- **WHEN** 调用 `fetchBookmarkStatus(entityId, "post")`
+- **THEN** 发送 `GET /api/posts/{entityId}/bookmark-status`，使用 `authFetch`
 - **AND** 返回 `ApiResponse<BookmarkStatusData>`，包含 `bookmarked: boolean`
 
-#### Scenario: toggleBookmark 成功
+#### Scenario: fetchBookmarkStatus 景点
 
-- **WHEN** 调用 `toggleBookmark(postId)`
-- **THEN** 发送 `POST /api/posts/{postId}/bookmark`，使用 `authFetch`
-- **AND** 返回 `ApiResponse<BookmarkData>`，包含 `bookmarked: boolean`
+- **WHEN** 调用 `fetchBookmarkStatus(entityId, "spot")`
+- **THEN** 发送 `GET /api/spots/{entityId}/bookmark-status`，使用 `authFetch`
+- **AND** 返回 `ApiResponse<BookmarkStatusData>`
+
+#### Scenario: toggleBookmark 帖子
+
+- **WHEN** 调用 `toggleBookmark(entityId, "post")`
+- **THEN** 发送 `POST /api/posts/{entityId}/bookmark`，使用 `authFetch`
+- **AND** 返回 `ApiResponse<BookmarkData>`
+
+#### Scenario: toggleBookmark 景点
+
+- **WHEN** 调用 `toggleBookmark(entityId, "spot")`
+- **THEN** 发送 `POST /api/spots/{entityId}/bookmark`，使用 `authFetch`
+- **AND** 返回 `ApiResponse<BookmarkData>`
 
 ### Requirement: 评论 API 客户端
 
-`lib/api/interactions.ts` SHALL 导出评论相关 API 函数。
+`lib/api/interactions.ts` SHALL 导出评论相关 API 函数，接受 `entityId` + `entityType` 参数（fetchReplies 除外，仍用 commentId）。
 
-#### Scenario: fetchComments 分页
+#### Scenario: fetchComments 帖子
 
-- **WHEN** 调用 `fetchComments(postId, page?, size?)`
-- **THEN** 发送 `GET /api/posts/{postId}/comments?page={page}&size={size}`，使用普通 `fetch`
+- **WHEN** 调用 `fetchComments(entityId, "post", page?, size?)`
+- **THEN** 发送 `GET /api/posts/{entityId}/comments?page={page}&size={size}`，使用普通 `fetch`
 - **AND** 返回 `ApiResponse<CommentListData>`
 
-#### Scenario: fetchReplies 分页
+#### Scenario: fetchComments 景点
 
-- **WHEN** 调用 `fetchReplies(commentId, page?, size?)`
-- **THEN** 发送 `GET /api/comments/{commentId}/replies?page={page}&size={size}`
+- **WHEN** 调用 `fetchComments(entityId, "spot", page?, size?)`
+- **THEN** 发送 `GET /api/spots/{entityId}/comments?page={page}&size={size}`
 - **AND** 返回 `ApiResponse<CommentListData>`
 
-#### Scenario: createComment 成功
+#### Scenario: createComment 帖子
 
-- **WHEN** 调用 `createComment(postId, content, parentCommentId?)`
-- **THEN** 发送 `POST /api/posts/{postId}/comments`，使用 `authFetch`
+- **WHEN** 调用 `createComment(entityId, "post", content, parentCommentId?)`
+- **THEN** 发送 `POST /api/posts/{entityId}/comments`，使用 `authFetch`
 - **AND** 返回 `ApiResponse<CommentData>`
 
-#### Scenario: deleteComment 成功
+#### Scenario: createComment 景点
 
-- **WHEN** 调用 `deleteComment(postId, commentId)`
-- **THEN** 发送 `DELETE /api/posts/{postId}/comments/{commentId}`，使用 `authFetch`
-- **AND** 返回 `ApiResponse<void>`（status: 204）
+- **WHEN** 调用 `createComment(entityId, "spot", content, parentCommentId?)`
+- **THEN** 发送 `POST /api/spots/{entityId}/comments`，使用 `authFetch`
+- **AND** 返回 `ApiResponse<CommentData>`
 
 ### Requirement: VoteButtons 投票按钮组
 
@@ -124,7 +136,7 @@
 
 ### Requirement: BookmarkButton 收藏按钮
 
-`app/posts/_components/BookmarkButton.tsx` SHALL 为 Client Component，接收 `postId`、`initialBookmarked` props。
+`app/posts/_components/BookmarkButton.tsx` SHALL 为 Client Component，接收 `entityId` + `entityType` + `initialBookmarked` props。
 
 #### Scenario: 初始渲染已收藏
 
@@ -141,7 +153,7 @@
 - **GIVEN** 用户已登录
 - **WHEN** 用户点击收藏按钮
 - **THEN** 乐观切换图标状态（空心 ↔ 填充）
-- **AND** 发送 `POST /api/posts/{postId}/bookmark`
+- **AND** 发送 `POST /api/{entityPath(entityType)}/{entityId}/bookmark`
 - **AND** 成功时确认状态，失败时回滚 + `toast.error("收藏失败，请重试")`
 
 #### Scenario: 未登录用户点击收藏
@@ -152,12 +164,12 @@
 
 ### Requirement: CommentSection 评论区
 
-`app/posts/_components/CommentSection.tsx` SHALL 为 Client Component，接收 `postId` props，管理评论输入 + 列表渲染。
+`app/posts/_components/CommentSection.tsx` SHALL 为 Client Component，接收 `entityId` + `entityType` props，管理评论输入 + 列表渲染。
 
 #### Scenario: 初始加载评论列表
 
 - **WHEN** 组件挂载
-- **THEN** 调用 `fetchComments(postId, 1, 20)`
+- **THEN** 调用 `fetchComments(entityId, entityType, 1, 20)`
 - **AND** 渲染评论列表（每条含头像占位、用户ID截断、内容、时间、回复按钮）
 
 #### Scenario: 空评论状态
@@ -199,36 +211,14 @@
 
 ### Requirement: CommentInput 评论输入
 
-`app/posts/_components/CommentInput.tsx` SHALL 提供评论输入框和发布按钮。
-
-#### Scenario: 已登录用户显示输入框
-
-- **GIVEN** 用户已登录
-- **WHEN** 渲染 CommentInput
-- **THEN** 显示 textarea + "发布"按钮，按钮默认禁用
-
-#### Scenario: 未登录用户隐藏输入框
-
-- **GIVEN** 用户未登录
-- **WHEN** 渲染 CommentInput
-- **THEN** 不显示输入框，显示"登录后即可评论"+ 跳转链接
+`app/posts/_components/CommentInput.tsx` SHALL 接收 `entityId` + `entityType` + `parentCommentId?` + `onSuccess` props。
 
 #### Scenario: 提交评论
 
 - **WHEN** 用户输入内容后点击"发布"
-- **THEN** 调用 `createComment(postId, content, parentCommentId?)`
+- **THEN** 调用 `createComment(entityId, entityType, content, parentCommentId?)`
 - **AND** 成功后清空输入框 + `toast.success("评论已发布")`
-- **AND** 将新评论插入列表顶部（无需刷新）
-
-#### Scenario: 提交空内容
-
-- **WHEN** 用户未输入内容就点击"发布"
-- **THEN** 按钮保持禁用，不发送请求
-
-#### Scenario: API 失败
-
-- **WHEN** `createComment` 返回错误
-- **THEN** `toast.error("评论失败，请重试")`，输入内容保留
+- **AND** 将新评论插入列表顶部
 
 ### Requirement: 后端 bookmark-status 端点
 

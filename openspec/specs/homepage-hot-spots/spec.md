@@ -44,17 +44,17 @@ The list of hot-spots items SHALL be sourced from a hard-coded TypeScript consta
 
 ### Requirement: 占位链接必须为严格 `#`
 
-Every hot-spots item's `href` SHALL be exactly the string `"#"`. This change MUST NOT introduce any business route path (e.g., `/spots/123`).
+Every hot-spots card item's `href` SHALL be exactly the string `"#"`. The "See all →" navigation link in the section header SHALL use `href="/spots/ranking"` to navigate to the ranking page.
 
-#### Scenario: 所有 href 严格等于 `#`
+#### Scenario: 卡片链接仍为占位 `#`
 
-- **WHEN** RTL 渲染 `<HotSpotsSlot />` 并 map 出每个 `<a>` 的 `href` 属性
-- **THEN** 所有元素 `=== "#"`
+- **WHEN** RTL 渲染 `<HotSpotsSlot />` 并 map 出每张卡片 `<a>` 的 `href` 属性
+- **THEN** 所有卡片项 `href === "#"`
 
-#### Scenario: 未引入业务路由文件
+#### Scenario: "See all" 链接指向排行榜页面
 
-- **WHEN** `find frontend/app -mindepth 2 -name 'page.tsx'`（排除 `app/page.tsx`）
-- **THEN** 输出为空
+- **WHEN** RTL 渲染 `<HotSpotsSlot />`
+- **THEN** 包含文本 "See all →" 的 `<a>` 元素 `href === "/spots/ranking"`
 
 ---
 
