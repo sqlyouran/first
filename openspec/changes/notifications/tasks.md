@@ -1,38 +1,38 @@
 ## 1. 后端 — NotificationEntity + 基础设施
 
-- [ ] 1.1 创建 `NotificationType` 枚举：`POST_LIKED`、`POST_COMMENTED`、`COMMENT_REPLIED`、`POST_BOOKMARKED`
-- [ ] 1.2 创建 `NotificationEntity` 继承 `BaseEntity`：`recipient_id`(UUID)、`actor_id`(UUID)、`type`(NotificationType, STRING)、`entity_id`(UUID, NULLABLE)、`entity_type`(VARCHAR 20, NULLABLE)、`content_preview`(VARCHAR 200, NULLABLE)、`read`(BOOLEAN, default false)
-- [ ] 1.3 创建 `NotificationRepository` 继承 `JpaRepository<NotificationEntity, UUID>`，含 `findByRecipientIdAndReadFalseAndDeletedFalse`、`countByRecipientIdAndReadFalseAndDeletedFalse`、`findByRecipientIdAndActorIdAndTypeAndEntityIdAndDeletedFalse` 方法
-- [ ] 1.4 创建 `NotificationService`（构造器注入 `NotificationRepository` + `UserRepository` + `PostRepository`）
+- [x] 1.1 创建 `NotificationType` 枚举：`POST_LIKED`、`POST_COMMENTED`、`COMMENT_REPLIED`、`POST_BOOKMARKED`
+- [x] 1.2 创建 `NotificationEntity` 继承 `BaseEntity`：`recipient_id`(UUID)、`actor_id`(UUID)、`type`(NotificationType, STRING)、`entity_id`(UUID, NULLABLE)、`entity_type`(VARCHAR 20, NULLABLE)、`content_preview`(VARCHAR 200, NULLABLE)、`read`(BOOLEAN, default false)
+- [x] 1.3 创建 `NotificationRepository` 继承 `JpaRepository<NotificationEntity, UUID>`，含 `findByRecipientIdAndReadFalseAndDeletedFalse`、`countByRecipientIdAndReadFalseAndDeletedFalse`、`findByRecipientIdAndActorIdAndTypeAndEntityIdAndDeletedFalse` 方法
+- [x] 1.4 创建 `NotificationService`（构造器注入 `NotificationRepository` + `UserRepository` + `PostRepository`）
 
 ## 2. 后端 — 通知创建逻辑
 
-- [ ] 2.1 编写 `NotificationService.createNotification()` 成功测试（帖子被点赞 → 创建 POST_LIKED 通知）
-- [ ] 2.2 编写自我过滤测试（自己点赞自己帖子 → 不创建通知）
-- [ ] 2.3 编写去重测试（同用户同内容重复互动 → 不产生重复通知）
-- [ ] 2.4 实现 `NotificationService.createNotification()`（含自我过滤 + 去重查询）
-- [ ] 2.5 实现 `NotificationService.deleteNotification()`（取消点赞时删除对应通知）
+- [x] 2.1 编写 `NotificationService.createNotification()` 成功测试（帖子被点赞 → 创建 POST_LIKED 通知）
+- [x] 2.2 编写自我过滤测试（自己点赞自己帖子 → 不创建通知）
+- [x] 2.3 编写去重测试（同用户同内容重复互动 → 不产生重复通知）
+- [x] 2.4 实现 `NotificationService.createNotification()`（含自我过滤 + 去重查询）
+- [x] 2.5 实现 `NotificationService.deleteNotification()`（取消点赞时删除对应通知）
 
 ## 3. 后端 — 通知 API 端点
 
-- [ ] 3.1 创建 `NotificationController` + Request/Response DTO（`NotificationListResponse`、`NotificationItemResponse`、`UnreadCountResponse`、`MarkAllReadResponse`）
-- [ ] 3.2 编写 `GET /api/notifications?page=1&size=20` 测试（成功分页 + 未认证 401 + 包含 actor 信息 + target_title）
-- [ ] 3.3 实现 `GET /api/notifications` 端点（JOIN user 表获取 actor nickname/avatar_url/username，JOIN post 表获取 title）
-- [ ] 3.4 编写 `POST /api/notifications/{id}/read` 测试（标记成功 + 操作他人通知 404）
-- [ ] 3.5 实现 `POST /api/notifications/{id}/read` 端点
-- [ ] 3.6 编写 `POST /api/notifications/mark-all-read` 测试（批量标记 + 返回 updated_count）
-- [ ] 3.7 实现 `POST /api/notifications/mark-all-read` 端点
-- [ ] 3.8 编写 `GET /api/notifications/unread-count` 测试（有未读 + 无未读）
-- [ ] 3.9 实现 `GET /api/notifications/unread-count` 端点
+- [x] 3.1 创建 `NotificationController` + Request/Response DTO（`NotificationListResponse`、`NotificationItemResponse`、`UnreadCountResponse`、`MarkAllReadResponse`）
+- [x] 3.2 编写 `GET /api/notifications?page=1&size=20` 测试（成功分页 + 未认证 401 + 包含 actor 信息 + target_title）
+- [x] 3.3 实现 `GET /api/notifications` 端点（JOIN user 表获取 actor nickname/avatar_url/username，JOIN post 表获取 title）
+- [x] 3.4 编写 `POST /api/notifications/{id}/read` 测试（标记成功 + 操作他人通知 404）
+- [x] 3.5 实现 `POST /api/notifications/{id}/read` 端点
+- [x] 3.6 编写 `POST /api/notifications/mark-all-read` 测试（批量标记 + 返回 updated_count）
+- [x] 3.7 实现 `POST /api/notifications/mark-all-read` 端点
+- [x] 3.8 编写 `GET /api/notifications/unread-count` 测试（有未读 + 无未读）
+- [x] 3.9 实现 `GET /api/notifications/unread-count` 端点
 
 ## 4. 后端 — 互动 Service 植入通知调用
 
-- [ ] 4.1 编写 `VoteService.toggleVote()` 通知集成测试（点赞 → 创建通知 + 取消点赞 → 删除通知 + 自我点赞不通知）
-- [ ] 4.2 修改 `VoteService.toggleVote()` 调用 `NotificationService.createNotification()` / `deleteNotification()`
-- [ ] 4.3 编写 `CommentService.createComment()` 通知集成测试（评论帖子 → 创建 POST_COMMENTED + 回复评论 → 创建 COMMENT_REPLIED + 自我评论不通知）
-- [ ] 4.4 修改 `CommentService.createComment()` 调用 `NotificationService.createNotification()`（含 content_preview = 评论前 50 字）
-- [ ] 4.5 编写 `BookmarkService.toggleBookmark()` 通知集成测试（收藏 → 创建通知 + 取消收藏 → 删除通知）
-- [ ] 4.6 修改 `BookmarkService.toggleBookmark()` 调用 `NotificationService.createNotification()` / `deleteNotification()`
+- [x] 4.1 编写 `VoteService.toggleVote()` 通知集成测试（点赞 → 创建通知 + 取消点赞 → 删除通知 + 自我点赞不通知）
+- [x] 4.2 修改 `VoteService.toggleVote()` 调用 `NotificationService.createNotification()` / `deleteNotification()`
+- [x] 4.3 编写 `CommentService.createComment()` 通知集成测试（评论帖子 → 创建 POST_COMMENTED + 回复评论 → 创建 COMMENT_REPLIED + 自我评论不通知）
+- [x] 4.4 修改 `CommentService.createComment()` 调用 `NotificationService.createNotification()`（含 content_preview = 评论前 50 字）
+- [x] 4.5 编写 `BookmarkService.toggleBookmark()` 通知集成测试（收藏 → 创建通知 + 取消收藏 → 删除通知）
+- [x] 4.6 修改 `BookmarkService.toggleBookmark()` 调用 `NotificationService.createNotification()` / `deleteNotification()`
 
 ## 5. 前端 — API 封装层
 
