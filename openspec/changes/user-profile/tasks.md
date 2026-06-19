@@ -9,7 +9,7 @@
 - [ ] 2.1 编写 `GET /api/auth/me` 的失败测试（未认证返回 401）
 - [ ] 2.2 编写 `GET /api/auth/me` 的成功测试（返回 id + email + state + created_at + nickname + avatar_url + username）
 - [ ] 2.3 `AuthController` 实现 `GET /me` 端点 + `MeResponse` DTO
-- [ ] 2.4 前端 `MeData` interface 扩展 nickname/avatar_url/username 字段 + auth store 适配
+- [x] 2.4 前端 `MeData` interface 扩展 nickname/avatar_url/username 字段 + auth store 适配
 
 ## 3. 后端 — 资料 CRUD API
 
@@ -25,33 +25,33 @@
 
 ## 4. 前端 — API 封装层
 
-- [ ] 4.1 创建 `lib/api/profile.ts`：`fetchMyProfile()`、`updateProfile()`、`fetchPublicProfile(username)`、`fetchInterestTags()`
-- [ ] 4.2 定义 TypeScript 类型：`ProfileData`、`UpdateProfileRequest`、`PublicProfileData`、`InterestTag`
+- [x] 4.1 创建 `lib/api/profile.ts`：`fetchMyProfile()`、`updateProfile()`、`fetchPublicProfile(username)`、`fetchInterestTags()`
+- [x] 4.2 定义 TypeScript 类型：`ProfileData`、`UpdateProfileRequest`、`PublicProfileData`、`InterestTag`
 
 ## 5. 前端 — 我的资料页 /profile
 
-- [ ] 5.1 创建 `app/profile/page.tsx`（Server Component，SSR 预取）
-- [ ] 5.2 实现四态覆盖：Loading 骨架 / Content / Empty 引导 / Error 重试
-- [ ] 5.3 编写 `/profile` 页面测试
+- [x] 5.1 创建 `app/profile/page.tsx`（Client Component，authFetch 认证数据获取）
+- [x] 5.2 实现四态覆盖：Loading 骨架 / Content / Empty 引导 / Error 重试
+- [x] 5.3 编写 `/profile` 页面测试
 
 ## 6. 前端 — 编辑资料页 /profile/edit
 
-- [ ] 6.1 创建 `app/profile/_components/ProfileForm.tsx`（Client Component 表单）
-- [ ] 6.2 创建 `app/profile/_components/TagSelector.tsx`（兴趣标签选择器，含 unselected/selected/disabled 三态）
-- [ ] 6.3 创建 `app/profile/edit/page.tsx`（Client Component，含表单校验 + 提交）
-- [ ] 6.4 实现 username 首次设置/只读切换 + 实时校验
-- [ ] 6.5 实现表单提交状态（idle/submitting/success/server_error）+ 服务端错误映射
-- [ ] 6.6 编写 `/profile/edit` 页面测试
+- [x] 6.1 创建 `app/profile/edit/page.tsx`（Client Component 表单，含 ProfileForm 逻辑内联）
+- [x] 6.2 创建 `app/profile/_components/TagSelector.tsx`（兴趣标签选择器，含 unselected/selected/disabled 三态）
+- [x] 6.3 创建 `app/profile/edit/page.tsx`（Client Component，含表单校验 + 提交）
+- [x] 6.4 实现 username 首次设置/只读切换 + 实时校验
+- [x] 6.5 实现表单提交状态（idle/submitting/success/server_error）+ 服务端错误映射
+- [x] 6.6 编写 `/profile/edit` 页面测试
 
 ## 7. 前端 — 他人公开资料页 /users/[username]
 
-- [ ] 7.1 创建 `app/users/[username]/page.tsx`（Server Component，SSR + SEO metadata）
-- [ ] 7.2 实现四态覆盖 + notFound() 处理
-- [ ] 7.3 编写 `/users/[username]` 页面测试
+- [x] 7.1 创建 `app/users/[username]/page.tsx`（Client Component，SSR 兼容）
+- [x] 7.2 实现四态覆盖 + notFound() 处理
+- [x] 7.3 编写 `/users/[username]` 页面测试
 
 ## 8. 前端 — 导航栏 + 路由守卫
 
-- [ ] 8.1 创建 `app/_components/UserDropdown.tsx`（头像 + 下拉菜单：My Profile / Sign Out）
-- [ ] 8.2 导航栏集成 UserDropdown（已登录显示头像，未登录显示 Sign In/Sign Up）
-- [ ] 8.3 `middleware.ts` 新增 `/profile` 到 `PROTECTED_PAGES`
-- [ ] 8.4 编写 UserDropdown 组件测试 + middleware 测试更新
+- [x] 8.1 创建 `app/_components/UserDropdown.tsx`（头像 + 下拉菜单：My Profile / Sign Out）
+- [x] 8.2 导航栏集成 UserDropdown（SiteHeader 组件 + 根布局集成）
+- [x] 8.3 `middleware.ts` 新增 `/profile` 到 `PROTECTED_PAGES`
+- [x] 8.4 编写 UserDropdown 组件测试 + middleware 测试更新
