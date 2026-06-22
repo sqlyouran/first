@@ -68,4 +68,4 @@
 
 - [x] 10.1 Run full backend test suite — all tests pass
 - [x] 10.2 Run full frontend test suite — all tests pass (1 pre-existing failure in posts/create unrelated)
-- [ ] 10.3 Manual smoke test: start backend + frontend, verify Header tools work end-to-end
+- [x] 10.3 Manual smoke test: start backend + frontend, verify Header tools work end-to-end

@@ -80,7 +80,7 @@
 #### Scenario: 点击帖子卡片跳转详情
 
 - **WHEN** 用户点击帖子卡片
-- **THEN** 导航到 `/posts/{id}`
+- **THEN** 导航到 `/posts/{slug}`（使用帖子的 slug 字段；后端 `GET /api/posts/{idOrSlug}` 同时支持 ID 和 slug 查找）
 
 #### Scenario: 空列表提示
 
@@ -93,8 +93,8 @@
 
 #### Scenario: 获取已发布帖子详情
 
-- **WHEN** 用户访问 `/posts/{id}`
-- **THEN** 通过 `fetchFromBackend` SSR 预取帖子数据、投票统计（`/api/posts/{id}/vote-stats`）、收藏状态（`/api/posts/{id}/bookmark-status`）
+- **WHEN** 用户访问 `/posts/{idOrSlug}`（路由参数可为 UUID 或 slug，后端统一通过 `findPostByIdOrSlug` 解析）
+- **THEN** 通过 `fetchFromBackend` SSR 预取帖子数据、投票统计（`/api/posts/{idOrSlug}/vote-stats`）、收藏状态（`/api/posts/{idOrSlug}/bookmark-status`）
 - **AND** 渲染标题（h1）、封面图、Markdown 正文（`react-markdown` + `remark-gfm`）、标签、作者、发布时间
 - **AND** 渲染投票按钮组（接收 initialVoteStats）、收藏按钮（接收 initialBookmarked）
 - **AND** 渲染评论区 CommentSection
@@ -124,7 +124,7 @@
 
 - **WHEN** 用户填写 title + content 后点击提交
 - **THEN** 调用 `createPost()` API
-- **AND** 成功后导航到 `/posts/{id}`
+- **AND** 成功后导航到 `/posts/{slug}`（使用返回数据中的 `slug` 字段）
 
 #### Scenario: 校验失败
 
