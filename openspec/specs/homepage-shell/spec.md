@@ -1,30 +1,31 @@
 # homepage-shell Spec
 
-> 首页骨架（Wanderchina 主页 6 region 容器契约）。本 spec 定义 `frontend/app/page.tsx` 与 `frontend/app/layout.tsx` 在「骨架阶段」必须满足的结构契约：5 个页内 region + 1 个 layout 常驻 ai-launcher。各 region 的具体内容、数据、样式由独立 capability（`homepage-hero` / `homepage-feature-nav` / `homepage-city-grid` / `homepage-hot-posts` / `homepage-hot-spots` / `homepage-ai-launcher`）分别承载。
+> 首页骨架（Wanderchina 主页 6 region 容器契约）。本 spec 定义 `frontend/app/page.tsx` 与 `frontend/app/layout.tsx` 在「骨架阶段」必须满足的结构契约：6 个页内 region（含 ai-launcher）。各 region 的具体内容、数据、样式由独立 capability（`homepage-hero` / `homepage-feature-nav` / `homepage-city-grid` / `homepage-hot-posts` / `homepage-hot-spots` / `homepage-ai-launcher`）分别承载。
 
 ## Requirements
 
-### Requirement: 首页 Page 必须渲染 5 个 region Slot 按文档顺序
+### Requirement: 首页 Page 必须渲染 6 个 region Slot 按文档顺序
 
-`app/page.tsx` SHALL render exactly 5 region slots in document order: `hero`, `feature-nav`, `city-grid`, `hot-posts`, `hot-spots`. The page MUST NOT render any other region slot.
+`app/page.tsx` SHALL render exactly 6 region slots in document order: `hero`, `feature-nav`, `city-grid`, `hot-posts`, `hot-spots`, `ai-launcher`.
 
-#### Scenario: 5 个 region 按文档顺序存在
+#### Scenario: 6 个 region 按文档顺序存在
 
 - **GIVEN** `app/page.tsx` 已按 homepage-shell apply 重写
 - **WHEN** RTL 渲染 `<Page />` 后取 `container.querySelectorAll('[data-region]')`
-- **THEN** NodeList 长度等于 `5`
-- **AND** 各节点 `data-region` 值依次为 `['hero','feature-nav','city-grid','hot-posts','hot-spots']`
+- **THEN** NodeList 长度等于 `6`
+- **AND** 各节点 `data-region` 值依次为 `['hero','feature-nav','city-grid','hot-posts','hot-spots','ai-launcher']`
 
-#### Scenario: page 不渲染 ai-launcher（页内护栏）
+#### Scenario: AiLauncherSlot 作为最后 region 渲染
 
 - **WHEN** RTL 渲染 `<Page />` 后查 `container.querySelector('[data-region="ai-launcher"]')`
-- **THEN** 返回 `null`
+- **THEN** 返回非 null
+- **AND** DOM 顺序上 `[data-region="ai-launcher"]` 节点出现在 `[data-region="hot-spots"]` 之后
 
 ---
 
-### Requirement: Layout 必须挂载 ai-launcher 常驻槽位
+### Requirement: Layout 必须挂载 SiteHeader 与 AuthProvider
 
-`app/layout.tsx` SHALL mount `<AiLauncherSlot />` after `{children}` inside `<body>`. The ai-launcher slot MUST appear in the rendered HTML on every route, after all page content. The ai-launcher container MUST contain exactly one `<button>` child element (its content contract is defined by `homepage-ai-launcher`).
+`app/layout.tsx` SHALL mount `<SiteHeader />` and `<AuthProvider>` wrapping `{children}` inside `<body>`. The layout no longer mounts AiLauncherSlot (moved to page.tsx in homepage-visual-v2).
 
 #### Scenario: layout 渲染 ai-launcher 在 children 之后
 
