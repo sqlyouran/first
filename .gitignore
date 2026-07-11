@@ -28,6 +28,14 @@ build/
 .env
 .env.local
 
+# 数据采集产出物（本地临时文件，不上传仓库）
+output/
+
+# Chroma 向量库本地数据（启动时自动重建）
+chroma/
+chroma_data/
+chroma.log
+
 # OpenSpec init 前的脚手架备份（确认无用后可手工删除）
 openspec.scaffold.bak/
 
