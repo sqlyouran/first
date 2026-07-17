@@ -29,6 +29,7 @@ config/       ← Spring 配置类
 ## Service
 
 - 构造器注入（不用 `@Autowired` 字段注入）
+- 例外：可选依赖（如 AI/RAG 等扩展功能模块）允许 `@Autowired(required = false)`，核心业务 Service 仍必须构造器注入
 - 日志用 SLF4J：`private static final Logger log = LoggerFactory.getLogger(Xxx.class)`
 - 业务异常抛自定义 `XxxException(HttpStatus, errorCode, message)`
 - 不返回 Entity 给 Controller，转换为 DTO 或内部 record

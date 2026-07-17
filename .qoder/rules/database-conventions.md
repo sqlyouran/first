@@ -3,7 +3,7 @@ trigger: always_on
 ---
 # 数据库规约
 
-后端使用 JPA (Hibernate) + PostgreSQL（开发阶段 H2 内存库）。以下为 SHOULD 级约定。
+后端使用 JPA (Hibernate) + MySQL（生产目标 PostgreSQL）。以下为 SHOULD 级约定。
 
 ## BaseEntity 公共基类
 
@@ -69,6 +69,7 @@ public abstract class BaseEntity {
 
 ## 开发环境
 
-- H2 内存库：`jdbc:h2:mem:wanderchina;DB_CLOSE_DELAY=-1`
-- DDL 策略：`create-drop`（每次启动重建）
+- MySQL 8：`jdbc:mysql://localhost:3306/wanderchina`
+- DDL 策略：`update`（启动时自动同步 schema）
+- H2 仅用于 test scope 单元测试（pom.xml 中 `<scope>test</scope>`）
 - 生产目标：PostgreSQL（迁移到 Flyway 管理 schema 时再切换）
