@@ -27,6 +27,11 @@ build/
 # Env
 .env
 .env.local
+# 生产密钥文件不入库（.env.production.example 模板仍追踪）
+.env.production
+
+# SSL 证书不入库（由 scripts/init-ssl.sh 在服务器生成）
+nginx/ssl/*.pem
 
 # 数据采集产出物（本地临时文件，不上传仓库）
 output/

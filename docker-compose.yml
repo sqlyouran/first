@@ -1,0 +1,59 @@
+# WanderChina 生产编排：nginx 对外，其余服务仅在 Docker 内网互通。
+# 启动：docker compose --env-file .env.production up -d --build
+
+services:
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./nginx/certbot:/var/www/certbot
+    depends_on:
+      - frontend
+      - backend
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    env_file:
+      - .env.production
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      REDIS_HOST: redis
+      CHROMA_HOST: http://chroma
+      CHROMA_PORT: 8000
+      MCP_CLIENT_ENABLED: "false"
+    depends_on:
+      - redis
+      - chroma
+
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      BACKEND_URL: http://backend:8080
+    depends_on:
+      - backend
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+
+  chroma:
+    image: chromadb/chroma:latest
+    restart: unless-stopped
+    volumes:
+      - chroma_data:/chroma/chroma
+
+volumes:
+  redis_data:
+  chroma_data:

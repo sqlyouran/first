@@ -1,0 +1,2 @@
+# SSL 证书目录占位。真实证书（fullchain.pem / privkey.pem）由 scripts/init-ssl.sh
+# 生成后放入本目录，且已在 .gitignore 中排除，不入库。
