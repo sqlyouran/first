@@ -6,9 +6,9 @@
 
 ## 2. Docker 容器化
 
-- [x] 2.1 创建 `backend/Dockerfile`：多阶段构建（maven:3.9-eclipse-temurin-17-jammy build → eclipse-temurin:17-jre-jammy run），暴露 8080
+- [x] 2.1 创建 `backend/Dockerfile`：多阶段构建（maven:3.9-eclipse-temurin-17-focal build → eclipse-temurin:17-jre-jammy run），暴露 8080
 - [x] 2.2 创建 `frontend/Dockerfile`：多阶段构建（node:20-alpine build → node:20-alpine run standalone），暴露 3000
-- [ ] 2.3 本地验证：`docker build -t wanderchina-backend backend/` 和 `docker build -t wanderchina-frontend frontend/` 均成功
+- [x] 2.3 验证：镜像构建成功（在 ECS 上通过 `docker compose up -d --build` 验证，`first-backend`/`first-frontend` 均 Built）
 
 ## 3. Nginx 反向代理配置
 
@@ -28,5 +28,5 @@
 
 ## 6. 验证与收尾
 
-- [ ] 6.1 本地完整验证：`docker compose up` 启动所有服务，确认 Nginx 分流正确（`/api/hello` → backend，`/` → frontend）
+- [x] 6.1 完整验证：在 ECS 上 `docker compose up` 启动全部 5 个服务（nginx/backend/frontend/redis/chroma）均 Up，Nginx 分流生效（`https://mediachina.app` 可访问、`/api/*` 走后端）
 - [x] 6.2 更新 `.gitignore`：添加 `.env.production`（生产密钥不入库）、`nginx/ssl/*.pem`（证书不入库）

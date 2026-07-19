@@ -5,7 +5,7 @@ The system SHALL provide a `backend/Dockerfile` that uses multi-stage build to p
 
 #### Scenario: Build stage compiles fat jar
 - **WHEN** `docker build` is executed for the backend
-- **THEN** the build stage uses `maven:3.9-eclipse-temurin-17-jammy` to run `mvn package -DskipTests` and produce `app.jar`
+- **THEN** the build stage uses `maven:3.9-eclipse-temurin-17-focal` to run `mvn package -DskipTests` and produce `app.jar`
 
 #### Scenario: Run stage uses minimal JRE image
 - **WHEN** the build completes
