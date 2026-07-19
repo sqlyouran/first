@@ -41,6 +41,10 @@ chroma/
 chroma_data/
 chroma.log
 
+# Redis 本地快照（运行时产物，不入库）
+dump.rdb
+*.rdb
+
 # OpenSpec init 前的脚手架备份（确认无用后可手工删除）
 openspec.scaffold.bak/
 
