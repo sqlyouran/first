@@ -2,8 +2,10 @@
 
 > 首页骨架（Wanderchina 主页 6 region 容器契约）。本 spec 定义 `frontend/app/page.tsx` 与 `frontend/app/layout.tsx` 在「骨架阶段」必须满足的结构契约：6 个页内 region（含 ai-launcher）。各 region 的具体内容、数据、样式由独立 capability（`homepage-hero` / `homepage-feature-nav` / `homepage-city-grid` / `homepage-hot-posts` / `homepage-hot-spots` / `homepage-ai-launcher`）分别承载。
 
-## Requirements
+## Purpose
 
+`homepage-shell` 定义 Wanderchina 首页的结构骨架：`app/page.tsx` 按文档顺序渲染 6 个 region slot，`app/layout.tsx` 挂载 SiteHeader 与 AuthProvider。各 region 的内容、数据、样式由独立 capability 承载。
+## Requirements
 ### Requirement: 首页 Page 必须渲染 6 个 region Slot 按文档顺序
 
 `app/page.tsx` SHALL render exactly 6 region slots in document order: `hero`, `feature-nav`, `city-grid`, `hot-posts`, `hot-spots`, `ai-launcher`.
@@ -161,3 +163,27 @@ All region slots SHALL conform to a shared page-level visual contract defined in
 - **WHEN** 检视所有 Slot 组件的 Tailwind class
 - **THEN** 布局使用 `grid-cols-2` / `md:grid-cols-4` 等断点类名
 - **AND** 断点符合 mobile < 768 / tablet 768-1023 / desktop ≥ 1024 分段
+
+### Requirement: SiteHeader 必须提供桌面端主导航
+
+`SiteHeader` SHALL render a primary navigation region, placed between the logo and the tool-icon cluster, that links to the main content pages: Cities → `/spots`, Stories → `/posts`, Spots → `/spots/ranking`. This navigation MUST be visible only on desktop widths (hidden below `md`, shown at `md` and above) so the existing mobile top bar layout (logo + tool icons) is not disrupted. Mobile navigation is explicitly out of scope for this change.
+
+#### Scenario: 桌面主导航链接存在且指向正确
+
+- **WHEN** RTL 渲染 `<SiteHeader />`
+- **THEN** 存在指向 `/spots`、`/posts`、`/spots/ranking` 的导航链接
+- **AND** 每个链接 `textContent.trim().length > 0`
+
+#### Scenario: 主导航仅桌面可见
+
+- **WHEN** 检视 `SiteHeader.tsx` 的主导航容器 className
+- **THEN** 含 `hidden` 且含 `md:flex`（或等效的 `md:` 显隐类）
+- **AND** 移动端（< md）不显示这些主导航链接
+
+#### Scenario: 现有工具图标与 Logo 布局保持不变
+
+- **WHEN** RTL 渲染 `<SiteHeader />`
+- **THEN** Logo（指向 `/` 的 Wanderchina 链接）仍存在
+- **AND** 工具图标簇（Weather / ExchangeRate / Notification / Message / User）仍全部存在
+- **AND** header 根容器仍为 `sticky top-0`
+
