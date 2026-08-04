@@ -1,0 +1,1 @@
+帮我创建一个 my‑first‑project 项目，并基于 harness+openspec+superpowers 的理念来初始化 Ai coding 开发的项目目录，其中 openspec 参考https://github.com/Fission‑AI/OpenSpec，其中 superpowers 参考 https://github.com/obra/superpowers
